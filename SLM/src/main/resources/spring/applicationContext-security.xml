@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Spring configuration for application -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:security="http://www.springframework.org/schema/security" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd"
+	default-lazy-init="true">
+
+	<security:http auto-config='true' entry-point-ref="authenticationEntryPoint" access-denied-page="/login?error=true">
+	
+		<security:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" enabled="true" />
+		
+		<security:intercept-url pattern="/css/**" filters="none" />
+		<security:intercept-url pattern="/img/**" filters="none" />
+		<security:intercept-url pattern="/js/**" filters="none" />
+		<security:intercept-url pattern="/login*" filters="none" />
+		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+		<security:intercept-url pattern="/**" filters="none" />
+		
+		<security:form-login login-page='/login' login-processing-url="/j_spring_security_check" username-parameter="j_username"
+			password-parameter="j_password" authentication-failure-url="/login?error" authentication-success-handler-ref="" />
+		<security:remember-me key="slmKey" token-validity-seconds="864000" user-service-ref="slmUserDetailsService"
+			remember-me-parameter="_spring_security_remember_me" />
+			
+		<security:session-management invalid-session-url="/login-form?session-expired" session-fixation-protection="migrateSession">
+			<security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" expired-url="/login-form?session-expired"
+				session-registry-alias="session-reg" />
+		</security:session-management>
+
+		<security:logout invalidate-session="true" logout-success-url="/login?logout=true" logout-url="/j_spring_security_logout"
+			delete-cookies="SPRING_RM" />
+		
+	</security:http>
+
+
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="slmUserDetailsService">
+			<security:password-encoder ref="bcryptEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<beans:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" ref="/login" />
+	</beans:bean>
+
+	<beans:bean id="rememberMeServices" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+		<beans:property name="userDetailsService" ref="slmUserDetailsService" />
+		<beans:property name="tokenValiditySeconds" value="864000" />
+		<beans:property name="cookieName" value="SPRING_RM" />
+		<beans:property name="key" value="slmKey" />
+	</beans:bean>
+
+	<beans:bean id="customAuthenticationSuccessHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/" />
+	</beans:bean>
+
+	<beans:bean name="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+	<beans:bean name="slmUserDetailsService" class="jp.slm.business.service.impl.SlmUserDetailsService" />
+
+</beans>

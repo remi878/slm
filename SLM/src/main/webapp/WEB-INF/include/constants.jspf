@@ -1,0 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
+
+<%-- Constantes utilisees par Spring Webflow --%>
+
+<c:set var="EVENTID_FIELD_PREFIX" value="_eventId_"/>
+<c:set var="EVENTID_FIELDURL_PREFIX" value="_eventId"/>
+<c:set var="FLOWEXECUTIONID_FIELD_NAME" value="_flowExecutionKey"/>
+

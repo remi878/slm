@@ -1,0 +1,82 @@
+<!--?xml version="1.0" encoding="UTF-8"?>
+
+<!-- description of the spring dispatcher servlet -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+  default-lazy-init="true">
+
+  <bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="mappings">
+      <props>
+<!--         <prop key="/pages/*.ex">filenameViewController</prop> -->
+<!--         <prop key="/**/*.ex">navigationController</prop> -->
+<!--         <prop key="/**/*.flow">flowcontroller</prop> -->
+      </props>
+    </property>
+    <property name="interceptors">
+      <list>
+<!--         <ref bean="contentInterceptor" /> -->
+      </list>
+    </property>
+  </bean>
+
+<!--   Interceptor Cache-Control: max-age dans le header (default : 0) -->
+<!--   <bean id="contentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor"> -->
+<!--     <property name="cacheSeconds"> -->
+<!--       <value>0</value> -->
+<!--     </property> -->
+<!--   </bean> -->
+
+<!--   <!-- intercepteur d'exception : permet d'éviter que les exceptions ingérable arrivent jusqu'à TOMCAT et soient affichées dans une page sans  -->
+<!--     présentation ce bean implémente l'interface HandlerExceptionResolver ainsi Spring reroute vers ce bean toutes les exceptions remontées jusqu'au  -->
+<!--     handler ci-dessus on est assuré de récupérer la quasi totalité des exceptions --> -->
+
+<!--   résolveurs de vues -->
+
+<!--   <bean id="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver"> -->
+<!--     <property name="order"> -->
+<!--       <value>1</value> -->
+<!--     </property> -->
+<!--     <property name="location"> -->
+<!--       <value>classpath:spring/applicationContext-views.xml</value> -->
+<!--     </property> -->
+<!--   </bean> -->
+
+<!--   Résolveur de vue pour vues JSP : utilisé systématiquement quand aucun autre résolveur de vue n'a pris la main pour résoudre une vue (lc) -->
+
+<!--   <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+<!--     <property name="viewClass"> -->
+<!--       <value>org.springframework.web.servlet.view.JstlView</value> -->
+<!--     </property> -->
+<!--     <property name="prefix"> -->
+<!--       <value>/WEB-INF/pages/</value> -->
+<!--     </property> -->
+<!--     <property name="suffix"> -->
+<!--       <value>.jsp</value> -->
+<!--     </property> -->
+<!--   </bean> -->
+
+
+<!--   controleurs -->
+
+<!--   <bean id="filenameViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController" /> -->
+
+
+<!--   <!-- controleur hors webflow qui gère la page d'accueil met en session les informations annuaire sur l'utilisateur (mises dans le contexte  -->
+<!--     sécurisé par le biais de spring security) et calcule le contenu de la barre de menu de l'utilisateur en fonction de ses profils --> -->
+<!--   service de generation de la barre de menu voir applicationContext-menu.xml -->
+
+<!--   <bean id="accueilController" class="jp.slm.web.controller.HomeController"> -->
+<!--   </bean> -->
+
+
+<!--   webflow Controller -->
+
+<!--   <bean id="flowcontroller" class="fr.gouv.finances.patrimel.mvc.FlowController"> -->
+<!--     <property name="flowExecutor" ref="flowExecutor" /> -->
+<!--     Pour maintenir la compatibilité avec la version 1.0 -->
+<!--     <property name="flowUrlHandler"> -->
+<!--       <bean class="org.springframework.webflow.context.servlet.WebFlow1FlowUrlHandler" /> -->
+<!--     </property> -->
+<!--   </bean> -->
+</beans-->

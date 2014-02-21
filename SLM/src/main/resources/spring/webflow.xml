@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+  xsi:schemaLocation="
+                http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                http://www.springframework.org/schema/webflow-config
+                http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd">
+
+  <webflow:flow-executor id="flowExecutor" flow-registry="flowRegistry">
+    <webflow:flow-execution-attributes>
+      <webflow:always-redirect-on-pause value="false" />
+    </webflow:flow-execution-attributes>
+    <webflow:flow-execution-repository max-executions="-1" />
+    <webflow:flow-execution-listeners>
+      <webflow:listener ref="securityFlowExecutionListener"/>
+<!--       <webflow:listener ref="previousstatelistener" /> -->
+    </webflow:flow-execution-listeners>
+  </webflow:flow-executor>
+
+  <webflow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
+    <webflow:flow-location-pattern value="/WEB-INF/flows/**/*-flow.xml" />
+  </webflow:flow-registry>
+
+  <webflow:flow-builder-services id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator" />
+
+
+  <!-- Ajout de la view tiles pour permettre le rendu par fragment : Objectif, retirer les framesets -->
+  <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+    <property name="definitions" value="/WEB-INF/tiles-def.xml" />
+  </bean>
+
+  <bean id="tilesViewResolver" class="org.springframework.js.ajax.AjaxUrlBasedViewResolver">
+    <property name="order" value="0"/>
+    <property name="viewNames" value=".*"/>
+    <property name="viewClass" value="org.springframework.webflow.mvc.view.FlowAjaxTilesView" />
+    <property name="contentType" value="text/html;charset=UTF-8"/>
+  </bean>
+
+  <!-- fin du chargement de tiles -->
+
+  <!-- modification de la liste des gestionnaires de vues -->
+  <bean id="mvcViewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+    <property name="viewResolvers">
+      <list>
+        <ref bean="tilesViewResolver" />
+        <ref bean="xmlViewResolver" />
+        <ref bean="jspWebflowViewResolver" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+
+    <!-- Ordre de traitement si plusieurs résolveurs de vues (hors résolveur jsp traité systématiquement en dernier) -->
+    <property name="order">
+      <value>1</value>
+    </property>
+<!--     localisation du Fichier XML décrivant les vues à intercepter et les classes devant traiter leur affichage (lc) -->
+<!--     <property name="location"> -->
+<!--       <value>/WEB-INF/conf/commun/applicationContext-views.xml</value> -->
+<!--     </property> -->
+  </bean>
+
+  <bean id="jspWebflowViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+    <property name="prefix">
+      <value>/WEB-INF/pages/</value>
+    </property>
+    <property name="suffix">
+      <value>.jsp</value>
+    </property>
+  </bean>
+
+<!--   <bean id="previousstatelistener" class="fr.gouv.finances.patrimel.mvc.webflow.listener.PreviousStateListener" /> -->
+  <bean id="securityFlowExecutionListener" class="org.springframework.webflow.security.SecurityFlowExecutionListener">
+      <property name="accessDecisionManager" ref="accessDecisionManager" />
+  </bean>
+
+</beans>

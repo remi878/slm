@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+    <definition name=".htmlLayout" template="/WEB-INF/layout/htmlLayout.jsp">
+        <put-attribute name="title" value="SLM - Street Live Music" />
+        <put-attribute name="headerCSS" value="/WEB-INF/pages/common/headerCSS.jsp" />
+        <put-attribute name="headerJS" value="/WEB-INF/pages/common/headerJS.jsp" />
+        <put-attribute name="body" />
+    </definition>
+
+    <definition name=".slmLayout" extends=".htmlLayout">
+        <put-attribute name="body">
+            <definition name=".bodyLayout" template="/WEB-INF/layout/bodyLayout.jsp">
+                <put-attribute name="headerBand" value="/WEB-INF/pages/common/headerBand.jsp" />
+                <put-attribute name="menu" value="/WEB-INF/pages/common/menu.jsp" />
+                <put-attribute name="content" value="" cascade="true" />
+            </definition>
+        </put-attribute>
+    </definition>
+
+    <definition name=".home" extends=".slmLayout">
+        <put-attribute name="content" value="/WEB-INF/pages/home-test.jsp" cascade="true" />
+    </definition>
+
+    <definition name=".test" extends=".slmLayout">
+        <put-attribute name="content" value="/WEB-INF/pages/test.jsp" cascade="true" />
+    </definition>
+
+</tiles-definitions>

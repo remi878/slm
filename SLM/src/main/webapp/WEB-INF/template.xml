@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+  <definition name=".appliIndisponible" template="/WEB-INF/pages/erreurs/appliIndisponible.jsp" />
+
+  <definition name=".CGU" extends=".simpleLayout">
+    <put-attribute name="content" value=".CGU.content" />
+  </definition>
+  
+  <definition name=".CGUwithPoppin" extends=".CGU">
+    <put-attribute name="content" value=".CGU.content.withPoppin" />
+  </definition>
+  
+  <definition name=".CGU.content" template="/WEB-INF/fragment/cgu.jsp">
+    <put-attribute name="cgu.html" value="/WEB-INF/fragment/cgu-content.jsp" />
+    <put-attribute name="message" value="/WEB-INF/fragment/common/message.jsp" />
+    <put-attribute name="poppin" value="/WEB-INF/fragment/common/poppin.jsp" />
+    <put-attribute name="showPoppin" value="false" />
+  </definition>
+  
+  <definition name=".CGU.content.withPoppin" template="/WEB-INF/fragment/cgu.jsp">
+    <put-attribute name="cgu.html" value="/WEB-INF/fragment/cgu-content.jsp" />
+    <put-attribute name="message" value="/WEB-INF/fragment/common/message.jsp" />
+    <put-attribute name="poppin" value="/WEB-INF/fragment/common/poppin.jsp" />
+    <put-attribute name="showPoppin" value="true" />
+  </definition>
+
+  <definition name=".simpleLayout" template="/WEB-INF/fragment/common/simpleLayout.jsp">
+    <put-attribute name="headerCSSandJS" value="/WEB-INF/fragment/common/headerCSSandJS.jsp" />
+    <put-attribute name="content" value="/WEB-INF/fragment/empty/empty.jsp" />
+  </definition>
+
+  <definition name=".appliIndisponible" extends=".mainLayout">
+    <put-attribute name="message" value="/WEB-INF/fragment/appliIndisponibleContent.jsp" />
+    <put-attribute name="poppin" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="header" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="carte" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="criteres" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="criteresSup" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="result" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="stat" value="/WEB-INF/fragment/empty/empty.jsp" />
+    <put-attribute name="motif" value="/WEB-INF/fragment/empty/empty.jsp" />
+  </definition>
+
+  <definition name=".mainLayout" template="/WEB-INF/fragment/common/mainLayout.jsp">
+    <put-attribute name="headerCSSandJS" value="/WEB-INF/fragment/common/headerCSSandJS.jsp" />
+    <put-attribute name="message" value="/WEB-INF/fragment/common/message.jsp" />
+    <put-attribute name="poppin" value="/WEB-INF/fragment/common/poppin.jsp" />
+    <put-attribute name="header" value=".headerCrit" />
+    <put-attribute name="footer" value="/WEB-INF/fragment/common/bas.jsp" />
+    <put-attribute name="carte" value="/WEB-INF/fragment/carte.jsp" />
+    <put-attribute name="criteres" value=".crit" />
+    <put-attribute name="criteresSup" value="/WEB-INF/fragment/empty/emptyCritSup.jsp" />
+    <put-attribute name="result" value="/WEB-INF/fragment/empty/emptyResult.jsp" />
+    <put-attribute name="stat" value="/WEB-INF/fragment/empty/emptyStat.jsp"/>
+    <put-attribute name="motif" value="/WEB-INF/fragment/empty/emptyMotif.jsp" />
+  </definition>
+
+  <definition name=".headerCrit" template="/WEB-INF/fragment/common/haut.jsp">
+    <put-attribute name="titre.page" value="Crit&amp;egrave;res de recherche" />
+    <put-attribute name="mode" value="recherche" />
+  </definition>
+
+  <definition name=".headerCritAvancee" template="/WEB-INF/fragment/common/haut.jsp">
+    <put-attribute name="titre.page" value="Crit&amp;egrave;res de recherche avanc&amp;eacute;e" />
+    <put-attribute name="mode" value="recherche" />
+  </definition>
+
+  <definition name=".headerResultat" template="/WEB-INF/fragment/common/haut.jsp">
+    <put-attribute name="titre.page" value="R&amp;eacute;sultats de la recherche" />
+    <put-attribute name="mode" value="resultats" />
+  </definition>
+
+  <definition name=".accueilRecherche" extends=".mainLayout">
+  </definition>
+
+  <definition name=".nouveau.motif" extends=".accueilRecherche">
+    <put-attribute name="motif" value="/WEB-INF/fragment/motifRecheche.jsp" />
+  </definition>
+
+  <definition name=".accueilRechercheMultiCoordonnees" extends=".accueilRecherche">
+    <put-attribute name="criteres" value=".critMultiCoordonnees" />
+  </definition>
+
+  <definition name=".accueilRechercheAvanceeMultiCoordonnees" extends=".rechercheAvancee">
+    <put-attribute name="criteres" value=".critAvanceeMultiCoordonnees" />
+  </definition>
+
+  <definition name=".crit" template="/WEB-INF/fragment/menuRecherche.jsp">
+    <put-attribute name="multiCoordonnees" value="false" />
+    <put-attribute name="critButtons" value="/WEB-INF/fragment/critButtons.jsp" />
+  </definition>
+
+  <definition name=".critAvancee" template="/WEB-INF/fragment/menuRecherche.jsp">
+    <put-attribute name="multiCoordonnees" value="false" />
+    <put-attribute name="critButtons" value="/WEB-INF/fragment/critAvanceeButtons.jsp" />
+  </definition>
+
+  <definition name=".critAvanceeMultiCoordonnees" template="/WEB-INF/fragment/menuRecherche.jsp">
+    <put-attribute name="multiCoordonnees" value="true" />
+    <put-attribute name="critButtons" value="/WEB-INF/fragment/critAvanceeButtons.jsp" />
+  </definition>
+
+  <definition name=".critMultiCoordonnees" template="/WEB-INF/fragment/menuRecherche.jsp">
+    <put-attribute name="multiCoordonnees" value="true" />
+    <put-attribute name="critButtons" value="/WEB-INF/fragment/critButtons.jsp" />
+  </definition>
+
+  <definition name=".rechercheAvancee" extends=".mainLayout">
+    <put-attribute name="criteres" value=".critAvancee" />
+    <put-attribute name="header" value=".headerCritAvancee" />
+    <put-attribute name="criteresSup" value="/WEB-INF/fragment/rechercheAvancee.jsp" />
+  </definition>
+
+  <definition name=".resultats" extends=".mainLayout">
+    <put-attribute name="header" value=".headerResultat" />
+    <put-attribute name="criteres" value="/WEB-INF/fragment/menuRechercheSaisi.jsp" />
+    <put-attribute name="criteresSup" value="/WEB-INF/fragment/empty/emptyCritSup.jsp" />
+    <put-attribute name="result" value="/WEB-INF/fragment/resultats.jsp" />
+  </definition>
+
+  <definition name=".statAccueil" extends=".mainLayout">
+    <put-attribute name="header" value="/WEB-INF/fragment/common/headerStats.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/fragment/common/bas.jsp" />
+    <put-attribute name="message" value="/WEB-INF/fragment/empty/emptyMessage.jsp" />
+    <put-attribute name="poppin" value="/WEB-INF/fragment/empty/emptyPoppin.jsp" />
+    <put-attribute name="carte" value="/WEB-INF/fragment/empty/emptyCarte.jsp" />
+    <put-attribute name="criteres" value="/WEB-INF/fragment/empty/emptyCrit.jsp" />
+    <put-attribute name="criteresSup" value="/WEB-INF/fragment/empty/emptyCritSup.jsp" />
+    <put-attribute name="result" value="/WEB-INF/fragment/empty/emptyResult.jsp" />
+    <put-attribute name="stat" value="/WEB-INF/fragment/statsAccueil.jsp"/>
+  </definition>
+  
+  <definition name=".statAgent" extends=".statAccueil">
+    <put-attribute name="stat" value="/WEB-INF/fragment/statsAgent.jsp"/>
+  </definition>
+  
+  <definition name=".statUsager" extends=".statAccueil">
+    <put-attribute name="stat" value="/WEB-INF/fragment/statsUsager.jsp"/>
+  </definition>
+  
+  <definition name=".statsRestitMoisAgent" extends=".statAccueil">
+    <put-attribute name="stat" value="/WEB-INF/fragment/statsRestitMoisAgent.jsp"/>
+  </definition>
+  
+  <definition name=".statsRestitMoisUsager" extends=".statAccueil">
+    <put-attribute name="stat" value="/WEB-INF/fragment/statsRestitMoisUsager.jsp"/>
+  </definition>
+  
+  <definition name=".statsRestitNatAnneeAgent" extends=".statAccueil">
+    <put-attribute name="stat" value="/WEB-INF/fragment/statsRestitNatAnneeAgent.jsp"/>
+  </definition>
+  
+  <definition name=".statsRestitNatMoisAgent" extends=".statAccueil">
+    <put-attribute name="stat" value="/WEB-INF/fragment/statsRestitNatMoisAgent.jsp"/>
+  </definition>
+</tiles-definitions>

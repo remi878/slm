@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Spring configuration for application -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:p="http://www.springframework.org/schema/p" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd"
+	default-lazy-init="true">
+
+
+	<!-- ========================= Annotation Scan ========================= -->
+
+	<context:component-scan base-package="jp.slm" />
+	<context:annotation-config />
+
+	<!-- ========================= Conf from properties ========================= -->
+	<!-- Environment properties are externalized from spring configuration into 
+		a properties files -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:slm.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
+	<bean id="SLMDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${slm.jdbc.driverClassName}" />
+		<property name="url" value="${slm.jdbc.url}" />
+		<property name="username" value="${slm.jdbc.username}" />
+		<property name="password" value="${slm.jdbc.password}" />
+	</bean>
+
+
+	<!-- ========================= TRANSACTIONS ========================= -->
+
+	<bean id="SLMtxManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="SLMDataSource" />
+	</bean>
+
+	<tx:advice id="SLMtxAdviceSrv" transaction-manager="SLMtxManager">
+		<tx:attributes>
+			<tx:method name="is*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="read*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="list*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="count*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:advisor pointcut="execution(* jp.slm.business.service.impl.*(..))"
+			advice-ref="SLMtxAdviceSrv" />
+	</aop:config>
+
+
+	<!-- ========================= Hibernate SessionFactory ========================= -->
+	<!-- http://ehcache.org/documentation/hibernate.html -->
+	<bean id="SLMSessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="SLMDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${slm.hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${slm.hibernate.showsql}</prop>
+				<prop key="hibernate.generate_statistics">${slm.hibernate.generate_statistics}</prop>
+				<prop key="hibernate.cache.use_query_cache">${slm.hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory
+				</prop>
+				<prop key="hibernate.jdbc.batch_size">30</prop>
+				<prop key="cache.use_second_level_cache">${slm.cache.use_second_level_cache}</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">ehcache.xml</prop>
+
+				<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
+				<!-- <prop key="hibernate.hbm2ddl.import_files">import.sql</prop> -->
+
+				<prop key="c3p0.idle_test_period">${slm.c3p0.idle_test_period}</prop>
+				<prop key="c3p0.min_size">${slm.c3p0.min_size}</prop>
+				<prop key="c3p0.max_size">${slm.c3p0.max_size}</prop>
+				<prop key="c3p0.max_statements">${slm.c3p0.max_statements}</prop>
+				<prop key="c3p0.timeout">${slm.c3p0.timeout}</prop>
+
+			</props>
+		</property>
+		<property name="eventListeners">
+			<map>
+				<entry key="merge">
+					<bean
+						class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener" />
+				</entry>
+			</map>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>jp.slm.business.bean</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- Transaction manager for an Hibernate SessionFactory for SLM -->
+	<bean id="SLMTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="SLMSessionFactory" />
+		<property name="nestedTransactionAllowed" value="true" />
+	</bean>
+
+
+
+</beans>

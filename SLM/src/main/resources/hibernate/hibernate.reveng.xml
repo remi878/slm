@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+<type-mapping>
+  <sql-type jdbc-type="BIT" hibernate-type="boolean" not-null="true"></sql-type>
+  <sql-type jdbc-type="INTEGER" hibernate-type="java.lang.Long" not-null="true"></sql-type>
+  <sql-type jdbc-type="LONGVARBINARY" hibernate-type="binary" not-null="false"></sql-type>
+</type-mapping>
+<table-filter match-schema="slm" match-name=".*" />
+  <table-filter match-name="artist" match-catalog="slm"></table-filter>
+  <table-filter match-name="artist_rate" match-catalog="slm"></table-filter>
+  <table-filter match-name="avatar" match-catalog="slm"></table-filter>
+  <table-filter match-name="bandmember" match-catalog="slm"></table-filter>
+  <table-filter match-name="comment" match-catalog="slm"></table-filter>
+  <table-filter match-name="event" match-catalog="slm"></table-filter>
+  <table-filter match-name="event_rate" match-catalog="slm"></table-filter>
+  <table-filter match-name="fan" match-catalog="slm"></table-filter>
+  <table-filter match-name="mp3" match-catalog="slm"></table-filter>
+  <table-filter match-name="picture" match-catalog="slm"></table-filter>
+  <table-filter match-name="presence" match-catalog="slm"></table-filter>
+  <table-filter match-name="user" match-catalog="slm"></table-filter>
+</hibernate-reverse-engineering>
