@@ -3,6 +3,8 @@
  */
 package jp.slm.business.bean.generic;
 
+import javax.persistence.MappedSuperclass;
+
 
 /**
  * The Class GenericIntegerIdBean.
@@ -10,6 +12,7 @@ package jp.slm.business.bean.generic;
  * @author rdurocher
  */
 @SuppressWarnings("serial")
-public abstract class GenericIntegerIdBean extends GenericPkBean<Integer>{
+@MappedSuperclass
+public abstract class GenericIntegerIdBean extends GenericSimplePkBean<Integer>{
     
 }

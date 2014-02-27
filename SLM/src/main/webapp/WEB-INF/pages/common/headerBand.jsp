@@ -22,8 +22,8 @@
 	<div class="float-right" id="login-link-wrapper">
 		<nav id='login-menu'>
 			<ul>
-				<li><a href="/login"><img src="./img/lock.png" class="float-left" /> <span class="float-left pl5 mr20">Login</span> <span class="clear-both"></span> </a></li>
-				<li><a href="/sign-up"><img src="./img/key.png" class="float-left " /> <span class="float-left pl5">Sign-up</span> </a></li>
+				<li><a href="<c:url value="/login"/>"><img src="./img/lock.png" class="float-left" /> <span class="float-left pl5 mr20">Login</span> <span class="clear-both"></span> </a></li>
+				<li><a href="${pageContext.request.contextPath}/sign-up"><img src="./img/key.png" class="float-left " /> <span class="float-left pl5">Sign-up</span> </a></li>
 			</ul>
 		</nav>
 	</div>

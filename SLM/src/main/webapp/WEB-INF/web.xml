@@ -10,27 +10,10 @@
 		<session-timeout>30</session-timeout>
 	</session-config>
 
-	<jsp-config>
-		<jsp-property-group>
-			<url-pattern>*.jsp</url-pattern>
-			<el-ignored>false</el-ignored>
-			<page-encoding>UTF-8</page-encoding>
-			<scripting-invalid>true</scripting-invalid>
-			<is-xml>false</is-xml>
-		</jsp-property-group>
-		<jsp-property-group>
-			<url-pattern>*.jspf</url-pattern>
-			<el-ignored>false</el-ignored>
-			<page-encoding>UTF-8</page-encoding>
-			<scripting-invalid>true</scripting-invalid>
-			<is-xml>false</is-xml>
-		</jsp-property-group>
-	</jsp-config>
-
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-              classpath:spring/applicationContext.xml
+              classpath:spring/applicationContext*.xml
      </param-value>
 	</context-param>
 
@@ -41,14 +24,15 @@
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
 
-	<!-- <filter> -->
-	<!-- <filter-name>SpringSecurity-Authentication</filter-name> -->
-	<!-- <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> -->
-	<!-- <init-param> -->
-	<!-- <param-name>targetBeanName</param-name> -->
-	<!-- <param-value>filterChainProxy</param-value> -->
-	<!-- </init-param> -->
-	<!-- </filter> -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
@@ -63,28 +47,9 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
-	<!-- <servlet-mapping> -->
-	<!-- <servlet-name>dispatcher</servlet-name> -->
-	<!-- <url-pattern>*.ex</url-pattern> -->
-	<!-- </servlet-mapping> -->
-
-	<!-- <servlet-mapping> -->
-	<!-- <servlet-name>dispatcher</servlet-name> -->
-	<!-- <url-pattern>*.do</url-pattern> -->
-	<!-- </servlet-mapping> -->
-	<!-- <servlet-mapping> -->
-	<!-- <servlet-name>dispatcher</servlet-name> -->
-	<!-- <url-pattern>*.flow</url-pattern> -->
-	<!-- </servlet-mapping> -->
-
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>dispatcher</servlet-name>
-		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>
