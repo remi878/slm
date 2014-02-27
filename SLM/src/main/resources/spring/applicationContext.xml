@@ -47,9 +47,9 @@
 
 	<!-- ========================= TRANSACTIONS ========================= -->
 
-	<bean id="SLMtxManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="SLMtxManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="dataSource" ref="SLMDataSource" />
+		<property name="sessionFactory" ref="SLMSessionFactory" />
 	</bean>
 
 	<tx:advice id="SLMtxAdviceSrv" transaction-manager="SLMtxManager">
@@ -65,7 +65,7 @@
 	</tx:advice>
 
 	<aop:config>
-		<aop:advisor pointcut="execution(* jp.slm.business.service.impl.*(..))"
+		<aop:advisor pointcut="execution(* jp.slm.business.service.impl.*.*(..))"
 			advice-ref="SLMtxAdviceSrv" />
 	</aop:config>
 
@@ -73,7 +73,7 @@
 	<!-- ========================= Hibernate SessionFactory ========================= -->
 	<!-- http://ehcache.org/documentation/hibernate.html -->
 	<bean id="SLMSessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="SLMDataSource" />
 		<property name="hibernateProperties">
 			<props>
@@ -81,8 +81,7 @@
 				<prop key="hibernate.show_sql">${slm.hibernate.showsql}</prop>
 				<prop key="hibernate.generate_statistics">${slm.hibernate.generate_statistics}</prop>
 				<prop key="hibernate.cache.use_query_cache">${slm.hibernate.cache.use_query_cache}</prop>
-				<prop key="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory
-				</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
 				<prop key="hibernate.jdbc.batch_size">30</prop>
 				<prop key="cache.use_second_level_cache">${slm.cache.use_second_level_cache}</prop>
 				<prop key="net.sf.ehcache.configurationResourceName">ehcache.xml</prop>
@@ -97,14 +96,6 @@
 				<prop key="c3p0.timeout">${slm.c3p0.timeout}</prop>
 
 			</props>
-		</property>
-		<property name="eventListeners">
-			<map>
-				<entry key="merge">
-					<bean
-						class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener" />
-				</entry>
-			</map>
 		</property>
 		<property name="packagesToScan">
 			<list>

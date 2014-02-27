@@ -3,13 +3,7 @@
  */
 package jp.slm.business.bean.generic;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 /**
  * The Class GenericPkBean.
@@ -29,13 +23,7 @@ public abstract class GenericPkBean<PK extends Serializable> extends GenericBean
      * 
      * @return the id
      */
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
-    public PK getId()
-    {
-        return this.id;
-    }
+    public abstract PK getId();
 
     /**
      * Sets the id.

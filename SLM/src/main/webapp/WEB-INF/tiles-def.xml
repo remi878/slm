@@ -29,4 +29,20 @@
         <put-attribute name="content" value="/WEB-INF/pages/test.jsp" cascade="true" />
     </definition>
 
+    <definition name=".login-form" extends=".slmLayout">
+        <put-attribute name="content" value="/WEB-INF/pages/login-form.jsp" cascade="true" />
+    </definition>
+    
+    
+    <definition name=".auto.*" extends=".slmLayout">
+        <put-attribute name="content" value="/WEB-INF/pages/{1}.jsp" cascade="true" />
+    </definition>
+    
+    
+    <definition name=".*" extends=".slmLayout">
+        <put-attribute name="content" value="/WEB-INF/pages/{1}.jsp" cascade="true" />
+    </definition>
+    
+    
+
 </tiles-definitions>

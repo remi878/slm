@@ -3,6 +3,8 @@
  */
 package jp.slm.business.bean.generic;
 
+import javax.persistence.MappedSuperclass;
+
 
 /**
  * The Class GenericLongIdBean.
@@ -10,6 +12,7 @@ package jp.slm.business.bean.generic;
  * @author rdurocher
  */
 @SuppressWarnings("serial")
-public abstract class GenericLongIdBean extends GenericPkBean<Long>{
+@MappedSuperclass
+public abstract class GenericLongIdBean extends GenericSimplePkBean<Long>{
 
 }
