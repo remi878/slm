@@ -39,4 +39,32 @@ public class ArtistRateId implements java.io.Serializable
         this.idUser = idUser;
     }
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idArtist == null) ? 0 : idArtist.hashCode());
+		result = prime * result + ((idUser == null) ? 0 : idUser.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		ArtistRateId other = (ArtistRateId) obj;
+		if (idArtist == null) {
+			if (other.idArtist != null) return false;
+		} else if (!idArtist.equals(other.idArtist)) return false;
+		if (idUser == null) {
+			if (other.idUser != null) return false;
+		} else if (!idUser.equals(other.idUser)) return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ArtistRateId [idArtist=" + idArtist + ", idUser=" + idUser + "]";
+	}
 }

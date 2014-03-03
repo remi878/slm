@@ -73,4 +73,8 @@ public class EventRateId implements java.io.Serializable
         return result;
     }
 
+	@Override
+	public String toString() {
+		return "EventRateId [idEvent=" + idEvent + ", idUser=" + idUser + "]";
+	}
 }

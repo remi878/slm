@@ -84,7 +84,7 @@
 				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
 				<prop key="hibernate.jdbc.batch_size">30</prop>
 				<prop key="cache.use_second_level_cache">${slm.cache.use_second_level_cache}</prop>
-				<prop key="net.sf.ehcache.configurationResourceName">ehcache.xml</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache.xml</prop>
 
 				<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
 				<!-- <prop key="hibernate.hbm2ddl.import_files">import.sql</prop> -->

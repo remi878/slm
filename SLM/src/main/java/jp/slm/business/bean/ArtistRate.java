@@ -20,58 +20,49 @@ import jp.slm.business.bean.generic.GenericEmbeddedPkBean;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "artist_rate")
-public class ArtistRate extends GenericEmbeddedPkBean<ArtistRateId>
-{
-    private User user;
-
-    private Artist artist;
-
-    private Integer rate;
-
-
-    @Override
-    @EmbeddedId
-    @AttributeOverrides({
-            @AttributeOverride(name = "idArtist", column = @Column(name = "id_artist", nullable = false)),
-            @AttributeOverride(name = "idUser", column = @Column(name = "id_user", nullable = false))})
-    public ArtistRateId getId()
-    {
-        return this.id;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", nullable = false, insertable = false, updatable = false)
-    public User getUser()
-    {
-        return this.user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_artist", nullable = false, insertable = false, updatable = false)
-    public Artist getArtist()
-    {
-        return this.artist;
-    }
-
-    public void setArtist(Artist artist)
-    {
-        this.artist = artist;
-    }
-
-    @Column(name = "rate", nullable = false)
-    public Integer getRate()
-    {
-        return this.rate;
-    }
-
-    public void setRate(Integer rate)
-    {
-        this.rate = rate;
-    }
-
+public class ArtistRate extends GenericEmbeddedPkBean<ArtistRateId> {
+	
+	private User user;
+	
+	private Artist artist;
+	
+	private Integer rate;
+	
+	@Override
+	@EmbeddedId
+	@AttributeOverrides({ @AttributeOverride(name = "idArtist", column = @Column(name = "id_artist", nullable = false)),
+			@AttributeOverride(name = "idUser", column = @Column(name = "id_user", nullable = false)) })
+	public ArtistRateId getId() {
+		return this.id;
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user", nullable = false, insertable = false, updatable = false)
+	public User getUser() {
+		return this.user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_artist", nullable = false, insertable = false, updatable = false)
+	public Artist getArtist() {
+		return this.artist;
+	}
+	
+	public void setArtist(Artist artist) {
+		this.artist = artist;
+	}
+	
+	@Column(name = "rate", nullable = false)
+	public Integer getRate() {
+		return this.rate;
+	}
+	
+	public void setRate(Integer rate) {
+		this.rate = rate;
+	}
+	
 }

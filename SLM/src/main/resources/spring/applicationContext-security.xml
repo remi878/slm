@@ -32,8 +32,6 @@
 			delete-cookies="SPRING_RM" />
 
 	</security:http>
-	<security:http pattern="/**" security="none" />
-
 
 	<security:authentication-manager>
 		<security:authentication-provider user-service-ref="slmUserDetailsService">
@@ -42,7 +40,7 @@
 	</security:authentication-manager>
 
 	<beans:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-		<beans:property name="loginFormUrl" ref="/login" />
+		<beans:property name="loginFormUrl" value="/login" />
 	</beans:bean>
 
 	<beans:bean id="rememberMeServices" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
