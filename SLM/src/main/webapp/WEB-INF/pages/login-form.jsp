@@ -9,7 +9,7 @@
 	<c:if test="${param.logout != null}">
 		<p>You have been logged out.</p>
 	</c:if>
-	<form action='<spring:url value="/j_spring_security_check"/>'>
+	<form action='<spring:url value="/j_spring_security_check"/>' method="post">
 		<input type="text" name="j_username" placeholder="email" size="32" maxlength="64" /><br /> 
 		<input type="password" name="j_password" placeholder="password" size="32" maxlength="64" /><br />
 		<input type="checkbox" name="_spring_security_remember_me"><label for="_spring_security_remember_me">Remember me</label><br /> 

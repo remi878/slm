@@ -17,9 +17,16 @@
 	<security:http auto-config='true' entry-point-ref="authenticationEntryPoint" access-denied-page="/login?error=true">
 		<security:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" enabled="true" />
 		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+		<security:intercept-url pattern="/artist/**" access="ROLE_ARTIST,ROLE_ADMIN" />
+		<security:intercept-url pattern="/fan/**" access="ROLE_FAN,ROLE_ADMIN" />
+		<security:intercept-url pattern="/user/**" access="ROLE_FAN,ROLE_ARTIST,ROLE_ADMIN" />
+		<security:intercept-url pattern="/sign*" access="ROLE_ANONYMOUS" />
+		<security:intercept-url pattern="/login" access="ROLE_ANONYMOUS" />
+		<security:intercept-url pattern="/log*" access="ROLE_ANONYMOUS,ROLE_FAN,ROLE_ARTIST,ROLE_ADMIN" />
+<!-- 		<security:intercept-url pattern="/j_*" access="ROLE_ANONYMOUS,ROLE_FAN,ROLE_ARTIST,ROLE_ADMIN" /> -->
 
 		<security:form-login login-page='/login' login-processing-url="/j_spring_security_check" username-parameter="j_username"
-			password-parameter="j_password" authentication-failure-url="/login?error=true" authentication-success-handler-ref="customAuthenticationSuccessHandler" />
+			password-parameter="j_password" authentication-failure-url="/login?error=true"  authentication-success-handler-ref="customAuthenticationSuccessHandler" />
 		<security:remember-me key="slmKey" token-validity-seconds="864000" user-service-ref="slmUserDetailsService"
 			remember-me-parameter="_spring_security_remember_me" />
 
@@ -35,7 +42,7 @@
 
 	<security:authentication-manager>
 		<security:authentication-provider user-service-ref="slmUserDetailsService">
-			<security:password-encoder ref="bcryptEncoder" />
+			<security:password-encoder ref="pwdEncoder" />
 		</security:authentication-provider>
 	</security:authentication-manager>
 
@@ -54,7 +61,11 @@
 		<beans:property name="defaultTargetUrl" value="/" />
 	</beans:bean>
 
-	<beans:bean name="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<beans:bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+	    <!-- After login, return to the last visited page -->
+	    <beans:property name="useReferer" value="true" />
+	</beans:bean>
+	<beans:bean name="pwdEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
 	<beans:bean name="slmUserDetailsService" class="jp.slm.business.service.impl.SlmUserDetailsService" />
 

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("serial")
 @Repository
-public class GenericBeanDaoImpl<T extends GenericBean, PK extends Serializable> extends GenericDaoImpl<T, PK> implements GenericBeanDao<T,PK> {
+public abstract class GenericBeanDaoImpl<T extends GenericBean, PK extends Serializable> extends GenericDaoImpl<T, PK> implements GenericBeanDao<T,PK> {
 
 	/**
      * The Constructor.

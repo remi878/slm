@@ -14,7 +14,9 @@ import java.io.Serializable;
 @SuppressWarnings({"rawtypes", "serial"})
 public abstract class GenericPkBean<PK extends Serializable> extends GenericBean implements Comparable<GenericPkBean<PK>>
 {
-
+	public static final String ID = "id";
+	
+	
     /** The id. */
     protected PK id;
 
