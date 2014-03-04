@@ -60,6 +60,40 @@ public interface GenericDao<T, PK extends Serializable> {
      * @param collection the collection
      */
     void deleteAll(Collection<T> collection);
+    
+    /**
+     * Delete by PK.
+     * 
+     * @param pk PK to delete
+     * @return the int number of delete
+     */
+    int deleteByPk(PK pk);
+    
+    /**
+     * Delete All by Pk.
+     * 
+     * @param pks PKs to delete
+     * @return the int number of delete
+     */
+    int deleteAllByPk(Collection<PK> pks);
+    
+    /**
+     * Delete by property.
+     * 
+     * @param propertyName the property name
+     * @param value the value
+     * @return the int number of delete
+     */
+    int deleteByProperty(String propertyName, Object value);
+    
+    /**
+     * Delete by property values.
+     * 
+     * @param propertyName the property name
+     * @param values the values
+     * @return the int number of delete
+     */
+    int deleteByProperty(String propertyName, Collection<Object> values);
 
 	/**
      * hibernate cache mgmt 
