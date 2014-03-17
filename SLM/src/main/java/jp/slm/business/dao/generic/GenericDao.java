@@ -59,7 +59,7 @@ public interface GenericDao<T, PK extends Serializable> {
      * 
      * @param collection the collection
      */
-    void deleteAll(Collection<T> collection);
+    void deleteAll(Collection<? extends T> collection);
     
     /**
      * Delete by PK.
@@ -75,7 +75,7 @@ public interface GenericDao<T, PK extends Serializable> {
      * @param pks PKs to delete
      * @return the int number of delete
      */
-    int deleteAllByPk(Collection<PK> pks);
+    int deleteAllByPk(Collection<? extends PK> pks);
     
     /**
      * Delete by property.
@@ -93,7 +93,7 @@ public interface GenericDao<T, PK extends Serializable> {
      * @param values the values
      * @return the int number of delete
      */
-    int deleteByProperty(String propertyName, Collection<Object> values);
+    int deleteByProperty(String propertyName, Collection<? extends Object> values);
 
 	/**
      * hibernate cache mgmt 
@@ -242,5 +242,5 @@ public interface GenericDao<T, PK extends Serializable> {
      * 
      * @param collection the collection
      */
-	void updateAll(Collection<T> collection);
+	void updateAll(Collection<? extends T> collection);
 }

@@ -248,7 +248,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * 
 	 * @see jp.slm.business.dao.generic.GenericDao#updateAll(java.util.List)
 	 */
-	public void updateAll(Collection<T> all) {
+	public void updateAll(Collection<? extends T> all) {
 		for (T element : all) {
 			getHibernateTemplate().saveOrUpdate(element);
 		}
@@ -278,7 +278,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @param all
 	 *            the all
 	 */
-	public void deleteAll(Collection<T> all) {
+	public void deleteAll(Collection<? extends T> all) {
 		getHibernateTemplate().deleteAll(all);
 	}
 	
@@ -352,8 +352,8 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * 
 	 * @see jp.slm.business.dao.generic.GenericDao#deleteAllByPk(java.util.Collection)
 	 */
-	public int deleteAllByPk(Collection<PK> pks) {
-		return deleteByProperty(getPkName(), (Collection<Object>) pks);
+	public int deleteAllByPk(Collection<? extends PK> pks) {
+		return deleteByProperty(getPkName(), pks);
 	}
 	
 	/**
@@ -372,7 +372,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * 
 	 * @see jp.slm.business.dao.generic.GenericDao#deleteByProperty(java.lang.String, java.util.Collection)
 	 */
-	public int deleteByProperty(String propertyName, Collection<Object> values) {
+	public int deleteByProperty(String propertyName, Collection<? extends Object> values) {
 		Query query = createHQLQuery("delete " + type.getName() + " where " + propertyName + " in (:values)");
 		query.setParameterList("values", values);
 		return query.executeUpdate();

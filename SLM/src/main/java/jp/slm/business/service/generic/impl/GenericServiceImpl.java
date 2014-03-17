@@ -46,7 +46,7 @@ public abstract class GenericServiceImpl<T, PK extends Serializable> implements 
     }
 
     @Override
-    public void deleteAll(Collection<T> collection)
+    public void deleteAll(Collection<? extends T> collection)
     {
         getDao().deleteAll(collection);
     }
@@ -57,7 +57,7 @@ public abstract class GenericServiceImpl<T, PK extends Serializable> implements 
     }
     
     @Override
-    public int deleteAllByPk(Collection<PK> pks) {
+    public int deleteAllByPk(Collection<? extends PK> pks) {
     	return getDao().deleteAllByPk(pks);
     }
     
@@ -67,7 +67,7 @@ public abstract class GenericServiceImpl<T, PK extends Serializable> implements 
     }
     
     @Override
-    public int deleteByProperty(String propertyName, Collection<Object> values) {
+    public int deleteByProperty(String propertyName, Collection<? extends Object> values) {
     	return getDao().deleteByProperty(propertyName, values);
     }
     
@@ -180,7 +180,7 @@ public abstract class GenericServiceImpl<T, PK extends Serializable> implements 
     }
 
     @Override
-    public void updateAll(Collection<T> collection)
+    public void updateAll(Collection<? extends T> collection)
     {
         getDao().updateAll(collection);
     }
