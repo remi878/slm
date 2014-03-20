@@ -3,12 +3,14 @@ package jp.slm.business.service.impl;
 import jp.slm.business.bean.Artist;
 import jp.slm.business.bean.Fan;
 import jp.slm.business.bean.User;
+import jp.slm.business.dao.ArtistDao;
+import jp.slm.business.dao.FanDao;
 import jp.slm.business.dao.UserDao;
-import jp.slm.business.service.ArtistService;
-import jp.slm.business.service.FanService;
 import jp.slm.business.service.UserService;
 import jp.slm.business.service.generic.impl.GenericLongIdBeanServiceImpl;
 import jp.slm.business.util.PasswordValidator;
+import jp.slm.web.form.ArtistRegistrationForm;
+import jp.slm.web.form.FanRegistrationForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,7 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -28,7 +29,7 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("serial")
 @Service
 @Transactional
-public class SlmUserDetailsService extends GenericLongIdBeanServiceImpl<User> implements UserService, UserDetailsManager {
+public class UserServiceImpl extends GenericLongIdBeanServiceImpl<User> implements UserService {
 	
 	private static final String USER_ID = "user.id";
 	
@@ -38,10 +39,10 @@ public class SlmUserDetailsService extends GenericLongIdBeanServiceImpl<User> im
 	private PasswordEncoder pwdEncoder;
 	
 	@Autowired
-	private ArtistService artistService;
+	private ArtistDao artistDao;
 	
 	@Autowired
-	private FanService fanService;
+	private FanDao fanDao;
 	
 	@Autowired
 	private UserDao dao;
@@ -59,11 +60,11 @@ public class SlmUserDetailsService extends GenericLongIdBeanServiceImpl<User> im
 			if (user != null) {
 				ud = user;
 				if (!user.isAdmin()) {
-					Artist a = artistService.findByProperty(USER_ID, user.getId());
+					Artist a = artistDao.findByProperty(USER_ID, user.getId());
 					if (a != null) {
 						ud = a;
 					} else {
-						Fan fan = fanService.findByProperty(USER_ID, user.getId());
+						Fan fan = fanDao.findByProperty(USER_ID, user.getId());
 						if (fan != null) {
 							ud = fan;
 						} else {
@@ -157,5 +158,27 @@ public class SlmUserDetailsService extends GenericLongIdBeanServiceImpl<User> im
 			res = currentUser.isAdmin() || (currentUser.getUsername().equals(email) && email != null);
 		}
 		return res;
+	}
+
+	@Override
+	public Fan signUpFan(FanRegistrationForm fanForm) {
+		Fan fan = new Fan(fanForm);
+		fanDao.create(fan);
+		userSignup(fan.getUser());
+		return fan;
+	}
+
+	@Override
+	@Transactional
+	public Artist signUpArtist(ArtistRegistrationForm artistForm) {
+		Artist artist = new Artist(artistForm);
+		artistDao.create(artist);
+		userSignup(artist.getUser());
+		return artist;
+	}
+
+	private void userSignup(User user) {
+		// TODO mail ...
+		
 	}
 }

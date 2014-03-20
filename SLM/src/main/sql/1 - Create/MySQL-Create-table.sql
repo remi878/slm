@@ -34,12 +34,13 @@ CREATE TABLE  `slm`.`user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'tech ID',
   
   `email` varchar(64) NOT NULL,
-  `password` varchar(45) NOT NULL COMMENT 'encripted/hashed password',
+  `password` varchar(90) NOT NULL COMMENT 'encripted/hashed password',
   
   -- tech info
   `auth_token` varchar(45) DEFAULT NULL COMMENT 'what is it ? email confirm ? sso : fb, google ? ',
   `pwd_reset` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'has reset pwd => need new pwd',
   `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'is admin',
+  `is_enabled` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'is account enabled',
   
   `creation_date` date NOT NULL COMMENT 'tech date when the user sign up',
   `last_login` date DEFAULT NULL COMMENT 'tech date of the user''s last login, needed for future purges of dead users ?',

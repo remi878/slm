@@ -33,11 +33,11 @@ import org.springframework.webflow.mvc.view.FlowViewResolver;
  * @see InternalResourceView
  * @author Keith Donald
  */
-public class FlowResourceFlowViewResolver implements FlowViewResolver
+public class OldFlowResourceFlowViewResolver implements FlowViewResolver
 {
 
     private static final boolean JSTL_PRESENT = ClassUtils.isPresent("javax.servlet.jsp.jstl.fmt.LocalizationContext",
-        FlowResourceFlowViewResolver.class.getClassLoader());
+        OldFlowResourceFlowViewResolver.class.getClassLoader());
 
     private String defaultViewSuffix = ".jsp";
 
@@ -53,7 +53,7 @@ public class FlowResourceFlowViewResolver implements FlowViewResolver
 
     /**
      * Sets the default suffix for view templates when selecting views by convention. Default is .jsp. Respected when a
-     * {@link FlowResourceFlowViewResolver} is configured.
+     * {@link OldFlowResourceFlowViewResolver} is configured.
      * 
      * @param defaultViewSuffix the default view suffix
      */

@@ -28,9 +28,9 @@ public interface GenericService<T, PK extends Serializable> extends Serializable
     /**
      * Count all.
      * 
-     * @return the integer
+     * @return the Long
      */
-    Integer countAll();
+    Long countAll();
 
     /**
      * Count by criterion.
@@ -45,9 +45,9 @@ public interface GenericService<T, PK extends Serializable> extends Serializable
      * 
      * @param propertyName the property name
      * @param value the value
-     * @return the integer
+     * @return the Long
      */
-    Integer countByProperty(String propertyName, Object value);
+    Long countByProperty(String propertyName, Object value);
 
     /**
      * Creates the.

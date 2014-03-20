@@ -15,7 +15,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.stat.EntityStatistics;
 import org.hibernate.stat.Statistics;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -49,7 +49,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @return the criteria
 	 */
 	protected Criteria createCriteria() {
-		return this.getSession().createCriteria(type);
+		return currentSession().createCriteria(type);
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @return the criteria
 	 */
 	protected Criteria createCriteria(Class<?> newType) {
-		return this.getSession().createCriteria(newType);
+		return currentSession().createCriteria(newType);
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * 
 	 * @see jp.slm.business.dao.generic.GenericDao#countAll()
 	 */
-	public Integer countAll() {
-		return (Integer) this.createCriteria().setProjection(Projections.rowCount()).setMaxResults(1).uniqueResult();
+	public Long countAll() {
+		return (Long) this.createCriteria().setProjection(Projections.rowCount()).setMaxResults(1).uniqueResult();
 	}
 	
 	/**
@@ -181,12 +181,12 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * 
 	 * @see jp.slm.business.dao.generic.GenericDao#countByProperty(java.lang.String, java.lang.Object)
 	 */
-	public Integer countByProperty(String propertyName, Object value) {
+	public Long countByProperty(String propertyName, Object value) {
 		Criteria c = this.createCriteria();
 		c.add(Restrictions.eq(propertyName, value));
 		c.setProjection(Projections.rowCount());
 		c.setMaxResults(1);
-		return (Integer) c.uniqueResult();
+		return (Long) c.uniqueResult();
 	}
 	
 	/**
@@ -195,8 +195,8 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @see jp.slm.business.dao.generic.GenericDao#existByProperty(java.lang.String, java.lang.Object)
 	 */
 	public boolean existByProperty(String propertyName, Object value) {
-		Integer count = countByProperty(propertyName, value);
-		return count != null ? count.intValue() > 0 : false;
+		Long count = countByProperty(propertyName, value);
+		return count != null ? count.longValue() > 0 : false;
 	}
 	
 	/**
@@ -308,7 +308,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @see jp.slm.business.dao.generic.GenericDao#evict(java.lang.Object)
 	 */
 	public void evict(T o) {
-		getSession().evict(o);
+		getHibernateTemplate().evict(o);
 	}
 	
 	/**
@@ -317,7 +317,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @see jp.slm.business.dao.generic.GenericDao#evictObject(java.lang.Object)
 	 */
 	public void evictObject(Object o) {
-		getSession().evict(o);
+		getHibernateTemplate().evict(o);
 	}
 	
 	/**
@@ -326,7 +326,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @see jp.slm.business.dao.generic.GenericDao#refresh(java.lang.Object)
 	 */
 	public void refresh(T o) {
-		getSession().refresh(o);
+		getHibernateTemplate().refresh(o);
 	}
 	
 	/**
@@ -335,7 +335,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 * @see jp.slm.business.dao.generic.GenericDao#refreshObject(java.lang.Object)
 	 */
 	public void refreshObject(Object o) {
-		getSession().refresh(o);
+		getHibernateTemplate().refresh(o);
 	}
 	
 	/**
@@ -379,7 +379,7 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	}
 	
 	protected Query createHQLQuery(String query) {
-		return getSession().createQuery(query);
+		return currentSession().createQuery(query);
 	}
 	
 	protected Query createQuery(String query) {

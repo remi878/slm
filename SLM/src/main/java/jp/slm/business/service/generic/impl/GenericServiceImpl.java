@@ -16,7 +16,7 @@ public abstract class GenericServiceImpl<T, PK extends Serializable> implements 
     abstract public GenericDao<T, PK> getDao();
 
     @Override
-    public Integer countAll()
+    public Long countAll()
     {
         return getDao().countAll();
     }
@@ -28,7 +28,7 @@ public abstract class GenericServiceImpl<T, PK extends Serializable> implements 
     }
 
     @Override
-    public Integer countByProperty(String propertyName, Object value)
+    public Long countByProperty(String propertyName, Object value)
     {
         return getDao().countByProperty(propertyName, value);
     }

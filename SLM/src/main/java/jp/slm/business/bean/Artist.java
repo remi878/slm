@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import jp.slm.business.bean.generic.GenericLongIdBean;
+import jp.slm.web.form.ArtistRegistrationForm;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +51,14 @@ public class Artist extends GenericLongIdBean implements UserDetails
     private Set<ArtistRate> artistRates = new HashSet<ArtistRate>(0);
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    public Artist(ArtistRegistrationForm artistForm) {
+    	this.user = new User(artistForm);
+    	this.youtube=artistForm.getYoutube();
+    	this.wimeo=artistForm.getWimeo();
+    	this.groupPhylos=artistForm.getGroupPhylos();
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "id_user")
     public User getUser() {
         return this.user;

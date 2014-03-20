@@ -8,6 +8,8 @@
 
 <style type="text/css">
 
+.error, .fieldInError {color: red;}
+
 *{position:relative;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box; margin: 0; padding: 0;}
 html { height: 100%; }
 body { height: 100%; margin: 0; padding: 0; background-color: #f2f2f2;}

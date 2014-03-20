@@ -25,7 +25,7 @@ import org.springframework.web.portlet.context.ConfigurablePortletApplicationCon
  * 
  * @author Keith Donald
  */
-public enum MvcEnvironment
+public enum oldMvcEnvironment
 {
 
     /**
@@ -44,16 +44,16 @@ public enum MvcEnvironment
      * @param applicationContext the application context
      * @return the web environment the context is running in, or null if not running in a web environment
      */
-    public static MvcEnvironment environmentFor(ApplicationContext applicationContext)
+    public static oldMvcEnvironment environmentFor(ApplicationContext applicationContext)
     {
-        if (ClassUtils.isPresent("javax.portlet.PortletContext", MvcEnvironment.class.getClassLoader())
+        if (ClassUtils.isPresent("javax.portlet.PortletContext", oldMvcEnvironment.class.getClassLoader())
             && isPortletApplicationContext(applicationContext))
         {
-            return MvcEnvironment.PORTLET;
+            return oldMvcEnvironment.PORTLET;
         }
         else if (applicationContext instanceof WebApplicationContext)
         {
-            return MvcEnvironment.SERVLET;
+            return oldMvcEnvironment.SERVLET;
         }
         else
         {
@@ -64,7 +64,7 @@ public enum MvcEnvironment
     private static boolean isPortletApplicationContext(ApplicationContext applicationContext)
     {
         return ClassUtils.isPresent("org.springframework.web.portlet.context.ConfigurablePortletApplicationContext",
-            MvcEnvironment.class.getClassLoader())
+            oldMvcEnvironment.class.getClassLoader())
             && applicationContext instanceof ConfigurablePortletApplicationContext;
     }
 
