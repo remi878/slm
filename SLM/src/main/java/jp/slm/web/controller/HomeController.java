@@ -1,11 +1,13 @@
 package jp.slm.web.controller;
 
+import jp.slm.web.controller.generic.GenericController;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class HomeController
+public class HomeController extends GenericController
 {
     @RequestMapping({"/home*","","/","/index*"})
     public String welcome()

@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Spring configuration for application -->
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:beans="http://www.springframework.org/schema/beans" 
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" 
-	xmlns:security="http://www.springframework.org/schema/security"
-    xmlns:p="http://www.springframework.org/schema/p" 
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:security="http://www.springframework.org/schema/security" xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd"
 	default-lazy-init="true">
+	<bean id="applicationContextUtil" class="jp.slm.common.util.ApplicationContextUtil" lazy-init="false"/>
 
 
 	<!-- ========================= Annotation Scan ========================= -->
 
-	<context:component-scan base-package="jp.slm" />
+	<context:component-scan base-package="jp.slm.business" />
+	<context:component-scan base-package="jp.slm.common" />
+	<context:component-scan base-package="jp.slm.batch" />
 	<context:annotation-config />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- proxy-target-class="true" -->
 
 	<!-- ========================= Conf from properties ========================= -->
-	<!-- Environment properties are externalized from spring configuration into 
-		a properties files -->
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<!-- Environment properties are externalized from spring configuration into a properties files -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath:slm.properties</value>
@@ -35,45 +32,17 @@
 		</property>
 	</bean>
 
-	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
-	<bean id="SLMDataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<!-- ========================= RESOURCE (DataSource) DEFINITIONS ========================= -->
+	<bean id="SLMDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${slm.jdbc.driverClassName}" />
 		<property name="url" value="${slm.jdbc.url}" />
 		<property name="username" value="${slm.jdbc.username}" />
 		<property name="password" value="${slm.jdbc.password}" />
 	</bean>
 
-
-	<!-- ========================= TRANSACTIONS ========================= -->
-
-	<bean id="SLMtxManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="dataSource" ref="SLMDataSource" />
-		<property name="sessionFactory" ref="SLMSessionFactory" />
-	</bean>
-
-	<tx:advice id="SLMtxAdviceSrv" transaction-manager="SLMtxManager">
-		<tx:attributes>
-			<tx:method name="is*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="read*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="list*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="count*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="*" propagation="REQUIRED" read-only="false" />
-		</tx:attributes>
-	</tx:advice>
-
-	<aop:config>
-		<aop:advisor pointcut="execution(* jp.slm.business.service.impl.*.*(..))"
-			advice-ref="SLMtxAdviceSrv" />
-	</aop:config>
-
-
 	<!-- ========================= Hibernate SessionFactory ========================= -->
 	<!-- http://ehcache.org/documentation/hibernate.html -->
-	<bean id="SLMSessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<bean id="SLMSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="SLMDataSource" />
 		<property name="hibernateProperties">
 			<props>
@@ -105,13 +74,31 @@
 	</bean>
 
 
+	<!-- ========================= TRANSACTIONS ========================= -->
+
 	<!-- Transaction manager for an Hibernate SessionFactory for SLM -->
-	<bean id="SLMTransactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="SLMSessionFactory" />
 		<property name="nestedTransactionAllowed" value="true" />
 	</bean>
 
+	<!-- <tx:advice id="SLMtxAdviceSrv" transaction-manager="transactionManager"> -->
+	<!-- <tx:attributes> -->
+	<!-- <tx:method name="is*" propagation="REQUIRED" read-only="true" /> -->
+	<!-- <tx:method name="read*" propagation="REQUIRED" read-only="true" /> -->
+	<!-- <tx:method name="get*" propagation="REQUIRED" read-only="true" /> -->
+	<!-- <tx:method name="find*" propagation="REQUIRED" read-only="true" /> -->
+	<!-- <tx:method name="list*" propagation="REQUIRED" read-only="true" /> -->
+	<!-- <tx:method name="count*" propagation="REQUIRED" read-only="true" /> -->
+	<!-- <tx:method name="*" propagation="REQUIRED" read-only="false" /> -->
+	<!-- </tx:attributes> -->
+	<!-- </tx:advice> -->
 
+	<!-- <aop:config> -->
+	<!-- <aop:pointcut expression="execution(* jp.slm.business.service.impl.*.*(..))" id="servicesImpl"/> -->
+	<!-- <aop:pointcut expression="execution(* jp.slm.business.service.*.*(..))" id="services"/> -->
+	<!-- <aop:advisor advice-ref="SLMtxAdviceSrv" pointcut-ref="services"/> -->
+	<!-- <aop:advisor advice-ref="SLMtxAdviceSrv" pointcut-ref="servicesImpl"/> -->
+	<!-- </aop:config> -->
 
 </beans>

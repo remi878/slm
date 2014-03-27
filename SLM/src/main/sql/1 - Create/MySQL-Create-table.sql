@@ -34,7 +34,7 @@ CREATE TABLE  `slm`.`user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'tech ID',
   
   `email` varchar(64) NOT NULL,
-  `password` varchar(90) NOT NULL COMMENT 'encripted/hashed password',
+  `password` varchar(96) NOT NULL COMMENT 'encrypted/hashed password',
   
   -- tech info
   `auth_token` varchar(45) DEFAULT NULL COMMENT 'what is it ? email confirm ? sso : fb, google ? ',
@@ -52,7 +52,7 @@ CREATE TABLE  `slm`.`user` (
   `birthdate` date DEFAULT NULL,
   `nickname` varchar(32) DEFAULT NULL COMMENT 'name to display',
   `description` varchar(512) DEFAULT NULL,
-  `website_url` varchar(64) NOT NULL COMMENT 'why not ? people like to link other site',
+  `website_url` varchar(64) DEFAULT NULL COMMENT 'why not ? people like to link other site',
   
   -- avatar FK
   `id_avatar` int(10) unsigned COMMENT 'FK to avatar',
@@ -62,7 +62,7 @@ CREATE TABLE  `slm`.`user` (
   CONSTRAINT `FK_USER_AVATAR` FOREIGN KEY (`id_avatar`) REFERENCES `avatar` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='registered user table (fan or artist or admin)';
 
-CREATE TABLE  `slm`.`artist` (
+CREATE TABLE `slm`.`artist` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'tech ID',
   `id_user` int(10) unsigned NOT NULL COMMENT 'FK to user mandatory',
 
@@ -76,7 +76,9 @@ CREATE TABLE  `slm`.`artist` (
   -- why not a music genre (like rock or pop , ...) and or somthing like 3 choise of music genre for the artist ?
   -- (with a table music genre and foreign key here)
   
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `FK_ARTIST_USER` (`id_user`),
+  CONSTRAINT `FK_ARTIST_USER` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='specific user table for artist info';
 
 CREATE TABLE  `slm`.`fan` (
@@ -213,3 +215,21 @@ CREATE TABLE  `slm`.`comment` (
   CONSTRAINT `FK_COM_MP3` FOREIGN KEY (`id_mp3`) REFERENCES `mp3` (`id`),
   CONSTRAINT `FK_COM_PICTURE` FOREIGN KEY (`id_picture`) REFERENCES `picture` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='user comment table';
+
+CREATE TABLE  `slm`.`session_log`(
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'tech ID',
+  `start_date` date NOT NULL COMMENT 'session start',
+  `end_date` date NOT NULL COMMENT 'session end',
+  `ip` TEXT NOT NULL COMMENT 'remote ip',
+  `referer` TEXT COMMENT 'remote referer',
+  `header` TEXT COMMENT 'first http request header',
+  `requested_host` TEXT COMMENT 'first http request header',
+  `user_ids` TEXT COMMENT 'concat of user ids (who log on with this session)',
+  `last_login_attempt` date COMMENT 'last login attempt date',
+  `nb_successive_login_attempts` int COMMENT 'nb login attempts',
+  `nb_request_pages` int COMMENT 'nb pages',
+  `nb_request_ressources` int COMMENT 'nb ressources',
+  `server_time` bigint COMMENT 'server time used',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='session log table';
+	

@@ -6,7 +6,6 @@ import jp.slm.business.bean.generic.GenericPkBean;
 import jp.slm.business.dao.generic.GenericPkBeanDao;
 
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 
 /**
  * The Class GenericBeanDaoImpl.
@@ -17,8 +16,7 @@ import org.springframework.stereotype.Repository;
  *            the generic type for the primary key of the object
  */
 @SuppressWarnings("serial")
-@Repository
-public class GenericPkBeanDaoImpl<T extends GenericPkBean<PK>, PK extends Serializable> extends GenericBeanDaoImpl<T, PK> implements GenericPkBeanDao<T, PK> {
+public abstract class GenericPkBeanDaoImpl<T extends GenericPkBean<PK>, PK extends Serializable> extends GenericBeanDaoImpl<T, PK> implements GenericPkBeanDao<T, PK> {
 	
 	private boolean updateIfCreateExistingEntity = true;
 	

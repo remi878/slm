@@ -15,6 +15,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.stat.EntityStatistics;
 import org.hibernate.stat.Statistics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 
@@ -29,9 +31,19 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings({ "unchecked", "serial" })
 @Repository
 public abstract class GenericDaoImpl<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK>, Serializable {
+
+	protected final Logger LOG = LoggerFactory.getLogger(getClass());
+	
 	
 	/** The type. */
 	protected Class<T> type;
+
+	
+	/**
+	 * The Constructor.
+	 */
+	protected GenericDaoImpl(){
+	}
 	
 	/**
 	 * The Constructor.

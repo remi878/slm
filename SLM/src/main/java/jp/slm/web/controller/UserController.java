@@ -6,11 +6,11 @@ import jp.slm.business.bean.Artist;
 import jp.slm.business.bean.Fan;
 import jp.slm.business.bean.User;
 import jp.slm.business.service.UserService;
+import jp.slm.web.controller.generic.GenericController;
 import jp.slm.web.form.ArtistRegistrationForm;
 import jp.slm.web.form.FanRegistrationForm;
 import jp.slm.web.form.UserRegistrationForm;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +19,10 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class UserController {
+public class UserController extends GenericController {
 	
 	public static final String REDIRECT = "redirect:/";
 	
@@ -67,6 +66,8 @@ public class UserController {
 				redirectAttributes.addFlashAttribute("userId", fan.getUser().getId());
 				view = REDIRECT + SIGNUP_SUCESS;
 			}
+		} else {
+			fanForm.setCaptchaResponse(null);
 		}
 		return view;
 	}
@@ -91,6 +92,8 @@ public class UserController {
 				view = REDIRECT + SIGNUP_SUCESS;
 				
 			}
+		} else {
+			artistForm.setCaptchaResponse(null);
 		}
 		return view;
 	}
@@ -109,11 +112,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = { "/" + SIGNUP_SUCESS + "*" })
-	public String signupSucess(@RequestParam String userId, Model model) {
+	public String signupSucess(Model model) {
 		String view = SIGNUP_SUCESS_PAGE;
 		User user = null;
-		if (StringUtils.isNotBlank(userId) && StringUtils.isNumeric(userId)) {
-			user = userService.findById(Long.parseLong(userId));
+		Long userId = (Long) model.asMap().get("userId");
+		if (userId!=null) {
+			user = userService.findById(userId);
 		}
 		if (user != null) {
 			model.addAttribute("user", user);

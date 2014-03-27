@@ -130,6 +130,7 @@ public class UserServiceImpl extends GenericLongIdBeanServiceImpl<User> implemen
 		}
 	}
 	
+//	@Transactional
 	@Override
 	public boolean userExists(String email) {
 		return dao.existByProperty(EMAIL, email);

@@ -14,6 +14,13 @@
 	<security:http pattern="/css/**" security="none" />
 	<security:http pattern="/img/**" security="none" />
 	<security:http pattern="/js/**" security="none" />
+	<security:http pattern="/audio/**" security="none" />
+	<security:http pattern="/font/**" security="none" />
+	<security:http pattern="/static/**" security="none" />
+	<security:http pattern="/misc/**" security="none" />
+	<security:http pattern="/" auto-config='true'>
+		<security:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" enabled="true" />
+	</security:http>
 	<security:http auto-config='true' entry-point-ref="authenticationEntryPoint" access-denied-page="/login?error=true">
 		<security:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" enabled="true" />
 		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
@@ -30,7 +37,7 @@
 
 		<security:form-login login-page='/login' login-processing-url="/j_spring_security_check" username-parameter="j_username"
 			password-parameter="j_password" authentication-failure-url="/login?error=true" authentication-success-handler-ref="customAuthenticationSuccessHandler" />
-		<security:remember-me key="slmKey" token-validity-seconds="864000" user-service-ref="userServiceImpl"
+		<security:remember-me key="slmKey" token-validity-seconds="864000" user-service-ref="userDetailsService"
 			remember-me-parameter="_spring_security_remember_me" />
 
 		<security:session-management invalid-session-url="/login-form?session-expired" session-fixation-protection="migrateSession">
@@ -44,7 +51,7 @@
 	</security:http>
 
 	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="userServiceImpl">
+		<security:authentication-provider user-service-ref="userDetailsService">
 			<security:password-encoder ref="pwdEncoder" />
 		</security:authentication-provider>
 	</security:authentication-manager>
@@ -54,7 +61,7 @@
 	</beans:bean>
 
 	<beans:bean id="rememberMeServices" class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
-		<beans:property name="userDetailsService" ref="userServiceImpl" />
+		<beans:property name="userDetailsService" ref="userDetailsService" />
 		<beans:property name="tokenValiditySeconds" value="864000" />
 		<beans:property name="cookieName" value="SPRING_RM" />
 		<beans:property name="key" value="slmKey" />
@@ -68,7 +75,15 @@
 		<!-- After login, return to the last visited page -->
 		<beans:property name="useReferer" value="true" />
 	</beans:bean>
-	
-	<beans:bean name="pwdEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+	<!-- for dev pwd are uncryptable -->
+	<beans:bean id="pwdEncoder" class="jp.slm.business.util.PasswordCrypter" lazy-init="false" />
+	<!-- <beans:bean id="pwdEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" lazy-init="false"/> -->
+
+	<beans:bean id="pwdEncoderHolder" class="jp.slm.common.util.PasswordEncoderHolder" lazy-init="false">
+		<beans:property name="pwdEncoder" ref="pwdEncoder" />
+	</beans:bean>
+
+	<beans:alias name="userServiceImpl" alias="userDetailsService" />
 
 </beans>

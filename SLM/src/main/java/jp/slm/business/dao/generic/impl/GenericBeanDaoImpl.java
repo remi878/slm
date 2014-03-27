@@ -6,7 +6,6 @@ import jp.slm.business.bean.generic.GenericBean;
 import jp.slm.business.dao.generic.GenericBeanDao;
 
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 
 
 /**
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Repository;
  * @param <PK> the generic type for the primary key of the object
  */
 @SuppressWarnings("serial")
-@Repository
 public abstract class GenericBeanDaoImpl<T extends GenericBean, PK extends Serializable> extends GenericDaoImpl<T, PK> implements GenericBeanDao<T,PK> {
 
 	/**

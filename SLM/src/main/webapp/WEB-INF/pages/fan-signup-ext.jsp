@@ -3,5 +3,5 @@
 
 <div id="fanFields">
 	<h3>Specific fan informations here ...</h3>
-
+	<br/><i> ... nothing yet ...</i><br/>
 </div>

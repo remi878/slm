@@ -2,7 +2,6 @@
 
 <%@ include file="/WEB-INF/include/includes.jspf"%>
 
-<%--Attributs principaux --%>
 <%@ attribute name="field" required="true"%>
 <%@ attribute name="label" required="true"%>
 <%@ attribute name="required" required="false"%>

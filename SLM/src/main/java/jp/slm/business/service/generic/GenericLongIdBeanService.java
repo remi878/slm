@@ -1,5 +1,7 @@
 package jp.slm.business.service.generic;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import jp.slm.business.bean.generic.GenericPkBean;
 import jp.slm.business.dao.generic.GenericLongIdBeanDao;
 
@@ -9,6 +11,7 @@ import jp.slm.business.dao.generic.GenericLongIdBeanDao;
  * 
  * @param <T> the generic type for the mapped object with hibernate
  */
+@Transactional
 public interface GenericLongIdBeanService<T extends GenericPkBean<Long>> extends GenericPkBeanService<T, Long> {
 
     /**
@@ -17,5 +20,5 @@ public interface GenericLongIdBeanService<T extends GenericPkBean<Long>> extends
      * @return the dao
      */
     @Override
-    GenericLongIdBeanDao<T> getDao();
+    abstract GenericLongIdBeanDao<T> getDao();
 }

@@ -10,7 +10,6 @@
 	default-lazy-init="false">
 
 	<context:component-scan base-package="jp.slm.web" />
-	<context:annotation-config />
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
 	<mvc:resources mapping="/img/*" location="/img/" />

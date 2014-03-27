@@ -4,7 +4,6 @@ import jp.slm.business.bean.generic.GenericIntegerIdBean;
 import jp.slm.business.dao.generic.GenericIntegerIdBeanDao;
 
 import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
 
 
 /**
@@ -14,8 +13,7 @@ import org.springframework.stereotype.Repository;
  * @param <PK> the generic type for the primary key of the object
  */
 @SuppressWarnings("serial")
-@Repository
-public class GenericIntegerIdBeanDaoImpl<T extends GenericIntegerIdBean> extends GenericPkBeanDaoImpl<T, Integer> implements GenericIntegerIdBeanDao<T> {
+public abstract class GenericIntegerIdBeanDaoImpl<T extends GenericIntegerIdBean> extends GenericPkBeanDaoImpl<T, Integer> implements GenericIntegerIdBeanDao<T> {
 
 	/**
      * The Constructor.

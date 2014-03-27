@@ -34,9 +34,9 @@ public class Artist extends GenericLongIdBean implements UserDetails
 
     private String youtube;
 
-    private String wimeo;
+    private String vimeo;
 
-    private String groupPhylos;
+    private String groupPhilos;
 
     private Set<Comment> comments = new HashSet<Comment>(0);
 
@@ -54,8 +54,8 @@ public class Artist extends GenericLongIdBean implements UserDetails
     public Artist(ArtistRegistrationForm artistForm) {
     	this.user = new User(artistForm);
     	this.youtube=artistForm.getYoutube();
-    	this.wimeo=artistForm.getWimeo();
-    	this.groupPhylos=artistForm.getGroupPhylos();
+    	this.vimeo=artistForm.getVimeo();
+    	this.groupPhilos=artistForm.getGroupPhylos();
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
@@ -80,25 +80,25 @@ public class Artist extends GenericLongIdBean implements UserDetails
     }
 
     @Column(name = "wimeo", length = 128)
-    public String getWimeo()
+    public String getVimeo()
     {
-        return this.wimeo;
+        return this.vimeo;
     }
 
-    public void setWimeo(String wimeo)
+    public void setVimeo(String vimeo)
     {
-        this.wimeo = wimeo;
+        this.vimeo = vimeo;
     }
 
     @Column(name = "group_phylos", length = 512)
-    public String getGroupPhylos()
+    public String getGroupPhilos()
     {
-        return this.groupPhylos;
+        return this.groupPhilos;
     }
 
-    public void setGroupPhylos(String groupPhylos)
+    public void setGroupPhilos(String groupPhilos)
     {
-        this.groupPhylos = groupPhylos;
+        this.groupPhilos = groupPhilos;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")

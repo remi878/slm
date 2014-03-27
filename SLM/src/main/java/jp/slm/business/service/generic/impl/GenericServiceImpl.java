@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jp.slm.business.dao.generic.GenericDao;
 import jp.slm.business.service.generic.GenericService;
@@ -13,6 +15,8 @@ import jp.slm.business.service.generic.GenericService;
 @SuppressWarnings("serial")
 public abstract class GenericServiceImpl<T, PK extends Serializable> implements GenericService<T,PK> {
 
+	protected final Logger LOG = LoggerFactory.getLogger(getClass());
+	
     abstract public GenericDao<T, PK> getDao();
 
     @Override

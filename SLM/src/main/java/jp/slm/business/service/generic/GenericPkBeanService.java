@@ -2,6 +2,8 @@ package jp.slm.business.service.generic;
 
 import java.io.Serializable;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import jp.slm.business.bean.generic.GenericPkBean;
 import jp.slm.business.dao.generic.GenericPkBeanDao;
 
@@ -12,6 +14,7 @@ import jp.slm.business.dao.generic.GenericPkBeanDao;
  * @param <T> the generic type for the mapped object with hibernate
  * @param <PK> the generic type for the primary key of the object
  */
+@Transactional
 public interface GenericPkBeanService<T extends GenericPkBean<PK>, PK extends Serializable> extends GenericBeanService<T, PK> {
 
 
@@ -21,5 +24,5 @@ public interface GenericPkBeanService<T extends GenericPkBean<PK>, PK extends Se
      * @return the dao
      */
     @Override
-    GenericPkBeanDao<T, PK> getDao();
+    abstract GenericPkBeanDao<T, PK> getDao();
 }

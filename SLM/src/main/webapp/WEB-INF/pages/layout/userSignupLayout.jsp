@@ -41,11 +41,16 @@
 				<form:textarea path="description" id="description" rows="3" cols="50" maxlength="512" placeholder="your description here ..." />
 			</div>
 		</slm:fieldBox>
-		<slm:inputBox label="Your site url (optional)" field="websiteUrl" required="false" size="30" maxlength="64" placeholder="mydomain.com"/>
+		<slm:inputBox label="Your site url (optional)" type="url" field="websiteUrl" required="false" size="30" maxlength="64" placeholder="mydomain.com"/>
 	</div>
 	
 	<tiles:insertAttribute name="ext" />
 	
+	
+	<div id="captchaFields">
+		<h3>Captcha (security against bots) :</h3>
+		<slm:captchaBox />
+	</div>
 	<div class="field submit">
 		<input type="submit" value="Sign-up" />
 	</div>

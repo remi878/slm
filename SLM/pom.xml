@@ -30,6 +30,9 @@
 		<!-- <org.apache.tiles.version>2.2.2</org.apache.tiles.version> -->
 		<org.apache.tiles.version>3.0.3</org.apache.tiles.version>
 		<org.apache.tiles.request.version>1.0.3</org.apache.tiles.request.version>
+
+		<org.hdiv.version>2.1.5</org.hdiv.version>
+
 	</properties>
 
 	<url>http://?SLM?.jp</url>
@@ -46,6 +49,20 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<repositories>
+		<repository>
+			<id>sourceforge-releases</id>
+			<name>Sourceforge Releases</name>
+			<url>https://oss.sonatype.org/content/repositories/sourceforge-releases/</url>
+		</repository>
+
+		<repository>
+			<id>java.net-Public</id>
+			<name>Maven Java Net Snapshots and Releases</name>
+			<url>https://maven.java.net/content/groups/public/</url>
+		</repository>
+	</repositories>
+
 
 	<dependencies>
 
@@ -342,11 +359,11 @@
 		</dependency>
 
 		<!-- Google GUAVA lib -->
-		<!-- <dependency> -->
-		<!-- <groupId>com.google.guava</groupId> -->
-		<!-- <artifactId>guava</artifactId> -->
-		<!-- <version>15.0</version> -->
-		<!-- </dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.google.guava</groupId> -->
+<!-- 			<artifactId>guava</artifactId> -->
+<!-- 			<version>16.0.1</version> -->
+<!-- 		</dependency> -->
 
 		<!-- Servlet & JSP API for compilation only (scope provided) -->
 		<dependency>
@@ -484,6 +501,50 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.7.3</version>
 		</dependency>
+
+		<!-- HDIV : Validation & security -->
+		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-core</artifactId>
+			<version>${org.hdiv.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-config</artifactId>
+			<version>${org.hdiv.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-spring-mvc</artifactId>
+			<version>${org.hdiv.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-jstl-taglibs-1.2</artifactId>
+			<version>${org.hdiv.version}</version>
+		</dependency>
+
+		<!-- Captcha API -->
+		<dependency>
+			<groupId>nl.captcha</groupId>
+			<artifactId>simplecaptcha</artifactId>
+			<version>1.2.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/simplecaptcha-1.2.1.jar</systemPath>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.octo.captcha</groupId> -->
+		<!-- <artifactId>jcaptcha</artifactId> -->
+		<!-- <version>2.0-alpha-1</version> -->
+		<!-- <scope>system</scope> -->
+		<!-- <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/jcaptcha-2.0-alpha-1.jar</systemPath> -->
+		<!-- </dependency> -->
+		<!-- https://oss.sonatype.org/content/repositories/sourceforge-releases//com/octo/captcha/jcaptcha-integration-simple-servlet/2.0-alpha-1/jcaptcha-integration-simple-servlet-2.0-alpha-1.jar -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.jhlabs</groupId> -->
+		<!-- <artifactId>filters</artifactId> -->
+		<!-- <version>2.0.235-1</version> -->
+		<!-- </dependency> -->
 
 	</dependencies>
 

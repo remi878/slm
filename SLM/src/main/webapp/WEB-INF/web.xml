@@ -10,6 +10,8 @@
 		<session-timeout>30</session-timeout>
 	</session-config>
 
+	<!-- ############ context-params ############ -->
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/applicationContext*.xml</param-value>
@@ -19,36 +21,87 @@
 		<param-value>true</param-value>
 	</context-param>
 
+	<!-- ############ listeners ############ -->
+
+	<listener>
+		<listener-class>jp.slm.web.listener.SessionLogListener</listener-class>
+	</listener>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<listener>
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
+	<!-- <listener> -->
+	<!-- <listener-class>org.hdiv.listener.InitListener</listener-class> -->
+	<!-- </listener> -->
+
+	<!-- ############ filters ############ -->
+
+	<filter>
+		<filter-name>sessionLogFilter</filter-name>
+		<filter-class>jp.slm.web.filter.SessionLogFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>sessionLogFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- HDIV Validator Filter -->
+	<!-- <filter> -->
+	<!-- <filter-name>ValidatorFilter</filter-name> -->
+	<!-- <filter-class>org.hdiv.filter.ValidatorFilter</filter-class> -->
+	<!-- </filter> -->
+	<!-- <filter-mapping> -->
+	<!-- <filter-name>ValidatorFilter</filter-name> -->
+	<!-- <servlet-name>dispatcher</servlet-name> -->
+	<!-- </filter-mapping> -->
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
-
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<!-- ############ servlets ############ -->
+
+	<servlet>
+		<servlet-name>StickyCaptcha</servlet-name>
+		<servlet-class>nl.captcha.servlet.SimpleCaptchaServlet</servlet-class>
+		<!-- The width and height and ttl params are optional: if unspecified they default to 200px and 50px and 10min respectively. -->
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>StickyCaptcha</servlet-name>
+		<url-pattern>/img/captcha.png</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AudioCaptcha</servlet-name>
+		<servlet-class>nl.captcha.servlet.AudioCaptchaServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AudioCaptcha</servlet-name>
+		<url-pattern>/audio/captcha.wav</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>
-                classpath:spring/dispatcher-servlet.xml
-<!--         classpath:spring/webflow.xml -->
-      		</param-value>
+			<param-value>classpath:spring/dispatcher-servlet.xml</param-value>
+			<!-- classpath:spring/webflow.xml -->
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
