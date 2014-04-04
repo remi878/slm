@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import jp.slm.business.bean.SessionLog;
 import jp.slm.business.service.SessionLogService;
+import jp.slm.web.controller.generic.GenericController;
 import jp.slm.web.util.RemoteInfoUtil;
 
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class SessionLogFilter extends OncePerRequestFilter {
-
+	
 	public static final Logger LOG = LoggerFactory.getLogger(SessionLogFilter.class);
 	
 	private final static String[] RESSOURCE_EXTS = new String[] { ".css", ".js", ".jpg", ".jpeg", ".png", ".cur", "/img/", "/css/", "/js/", "/static/", "/misc/", "/font/" };
@@ -46,9 +47,11 @@ public class SessionLogFilter extends OncePerRequestFilter {
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+		
 		long timer = System.currentTimeMillis();
 		SessionLog sessionLog = null;
 		boolean ok = true;
+		
 		if (request.getSession(false) == null || request.getSession().getAttribute(SessionLog.class.getName()) == null) {
 			if (hasToManySession(request)) {
 				ok = false;
@@ -61,22 +64,27 @@ public class SessionLogFilter extends OncePerRequestFilter {
 			}
 		} else {
 			sessionLog = (SessionLog) request.getSession().getAttribute(SessionLog.class.getName());
-			populateSessionLog(request, sessionLog);
+			if (!sessionLog.getIp().equalsIgnoreCase(RemoteInfoUtil.getClientIpAddr(request))) {
+				request.getSession().invalidate();
+				response.sendError(HttpServletResponse.SC_CONFLICT);
+			} else {
+				ok = false;
+				populateSessionLog(request, sessionLog);
+			}
 		}
-		long timer2 = System.currentTimeMillis() - timer;
+		
 		if (ok) {
 			if (sessionLog != null && isLoginAccess(request) && isLoginThresholdEnable(request, sessionLog)) {
 				handleTooManyLoginAttempt(request);
 			} else {
 				filterChain.doFilter(request, response);
 			}
+			timer = System.currentTimeMillis() - timer;
+			if (sessionLog != null) {
+				sessionLog.addServerTime(timer);
+			}
 		}
 		
-		timer = System.currentTimeMillis() - timer;
-		if (sessionLog != null) {
-			sessionLog.addServerTime(timer);
-		}
-		System.out.println("SessionLogFilter Timers : " + timer2 + " / " + timer);
 		
 	}
 	
@@ -180,7 +188,7 @@ public class SessionLogFilter extends OncePerRequestFilter {
 			sessionLog.setNbRequestRessources(sessionLog.getNbRequestRessources() + 1);
 		} else {
 			sessionLog.setNbRequestPages(sessionLog.getNbRequestPages() + 1);
-			if (request.getRequestURI().contains("/j_spring_security_check")) {
+			if (request.getRequestURI().contains(GenericController.LOGIN_PROCESS_URL)) {
 				if (sessionLog.getLastLoginAttempts() != null) {
 					Date lastTry = sessionLog.getLastLoginAttempts();
 					Date timeOut = new Date(lastTry.getTime() + LOGIN_THRESHOLD_TIMEOUT);

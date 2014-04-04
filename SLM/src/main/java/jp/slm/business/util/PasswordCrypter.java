@@ -11,21 +11,25 @@ import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * PasswordCrypter for dev purpose only : for prod it's beter to keep password undecryptable with a digester 
+ * PasswordCrypter for dev purpose only : for prod it's beter to keep password undecryptable with a digester
+ * 
  * @see applicationContext-security.xml
  * 
  * @author rDurocher
- *
+ * 
  */
 public class PasswordCrypter implements PasswordEncoder {
 	
-	private static final byte[] PASSWORD_TOKEN = new byte[]{53,53,52,55,52,54,55,97,54,51,51,51,54,52,55,54,54,51,54,100,53,49,51,100};
-
+	private static final byte[] PASSWORD_TOKEN = new byte[] { 53, 53, 52, 55, 52, 54, 55, 97, 54, 51, 51, 51, 54, 52, 55, 54, 54, 51, 54, 100, 53, 49, 51, 100 };
+	
 	private static final String ALGORITHM = "Blowfish";
-//	private static final String ALGORITHM = "RC2";
-//	private static final String ALGORITHM = "DES";
-//	private static final String ALGORITHM = "AES";
-
+	
+	// private static final String ALGORITHM = "RC2";
+	// private static final String ALGORITHM = "DES";
+	// private static final String ALGORITHM = "AES";
+	
+	private static final PasswordCrypter INSTANCE = new PasswordCrypter();
+	
 	private Cipher cipher;
 	
 	private Key key;
@@ -40,7 +44,14 @@ public class PasswordCrypter implements PasswordEncoder {
 		} catch (Exception e) {
 			throw new IllegalStateException(e);
 		}
-		
+	}
+	
+	public static String encodeStr(String str) {
+		return INSTANCE.encode(str);
+	}
+	
+	public static String decodeStr(String str) {
+		return INSTANCE.decode(str);
 	}
 	
 	@Override

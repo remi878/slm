@@ -20,6 +20,8 @@
 	<security:http pattern="/misc/**" security="none" />
 	<security:http pattern="/" auto-config='true'>
 		<security:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" enabled="true" />
+		<security:remember-me key="slmKey" token-validity-seconds="864000" user-service-ref="userDetailsService"
+			remember-me-parameter="_spring_security_remember_me" /><!-- 864000 s = 10 days -->
 	</security:http>
 	<security:http auto-config='true' entry-point-ref="authenticationEntryPoint" access-denied-page="/login?error=true">
 		<security:anonymous username="anonymousUser" granted-authority="ROLE_ANONYMOUS" enabled="true" />
@@ -33,10 +35,11 @@
 		<security:intercept-url pattern="/*sign-up" access="ROLE_ANONYMOUS" />
 		<security:intercept-url pattern="/login" access="ROLE_ANONYMOUS" />
 		<security:intercept-url pattern="/log*" access="ROLE_ANONYMOUS,ROLE_FAN,ROLE_ARTIST,ROLE_ADMIN" />
-		<!-- <security:intercept-url pattern="/j_*" access="ROLE_ANONYMOUS,ROLE_FAN,ROLE_ARTIST,ROLE_ADMIN" /> -->
+<!-- 		<security:intercept-url pattern="/j_spring_security_check" method="GET" /> -->
+		<security:intercept-url pattern="/j_*" access="ROLE_ANONYMOUS,ROLE_FAN,ROLE_ARTIST,ROLE_ADMIN" />
 
 		<security:form-login login-page='/login' login-processing-url="/j_spring_security_check" username-parameter="j_username"
-			password-parameter="j_password" authentication-failure-url="/login?error=true" authentication-success-handler-ref="customAuthenticationSuccessHandler" />
+			password-parameter="j_password" authentication-failure-url="/login?error=true" authentication-success-handler-ref="authenticationSuccessHandler" />
 		<security:remember-me key="slmKey" token-validity-seconds="864000" user-service-ref="userDetailsService"
 			remember-me-parameter="_spring_security_remember_me" />
 
@@ -50,6 +53,8 @@
 
 	</security:http>
 
+	<bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+	
 	<security:authentication-manager>
 		<security:authentication-provider user-service-ref="userDetailsService">
 			<security:password-encoder ref="pwdEncoder" />
@@ -72,12 +77,16 @@
 	</beans:bean>
 
 	<beans:bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/" />
 		<!-- After login, return to the last visited page -->
 		<beans:property name="useReferer" value="true" />
 	</beans:bean>
 
-	<!-- for dev pwd are uncryptable -->
-	<beans:bean id="pwdEncoder" class="jp.slm.business.util.PasswordCrypter" lazy-init="false" />
+	<!-- for dev only : pwd are row password (no encodage) -->
+	<beans:bean id="pwdEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder" lazy-init="false" />
+	<!-- for dev only : pwd are decryptable -->
+	<!-- <beans:bean id="pwdEncoder" class="jp.slm.business.util.PasswordCrypter" lazy-init="false" /> -->
+	<!-- for prod : pwd are hashed (not possible to retrieved) -->
 	<!-- <beans:bean id="pwdEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" lazy-init="false"/> -->
 
 	<beans:bean id="pwdEncoderHolder" class="jp.slm.common.util.PasswordEncoderHolder" lazy-init="false">

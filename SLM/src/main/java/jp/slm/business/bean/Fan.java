@@ -11,9 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.GroupSequence;
+import javax.validation.Valid;
 
 import jp.slm.business.bean.generic.GenericLongIdBean;
-import jp.slm.web.form.FanRegistrationForm;
+import jp.slm.web.validation.group.FirstValidationGroup;
+import jp.slm.web.validation.group.SecondValidationGroup;
+import jp.slm.web.validation.group.ThirdValidationGroup;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,76 +28,70 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "fan")
-public class Fan extends GenericLongIdBean implements UserDetails
-{
-
-    private User user;
-
-    public Fan(FanRegistrationForm fanForm) {
-    	this.user = new User(fanForm);
+@GroupSequence({ FirstValidationGroup.class, SecondValidationGroup.class, ThirdValidationGroup.class, User.class ,Fan.class})
+public class Fan extends GenericLongIdBean implements UserDetails {
+	
+	@Valid
+	private User user;
+	
+	public Fan() {}
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_user", nullable = false)
+	public User getUser() {
+		return this.user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	@Transient
+	@Override
+	public Collection<GrantedAuthority> getAuthorities() {
+		Collection<GrantedAuthority> roles = user.getAuthorities();
+		roles.add(User.FAN_ROLE);
+		return roles;
+	}
+	
+	@Transient
+	@Override
+	public String getPassword() {
+		return user.getPassword();
+	}
+	
+	@Transient
+	@Override
+	public String getUsername() {
+		return user.getUsername();
+	}
+	
+	@Transient
+	@Override
+	public boolean isAccountNonExpired() {
+		return user.isAccountNonExpired();
+	}
+	
+	@Transient
+	@Override
+	public boolean isAccountNonLocked() {
+		return user.isAccountNonLocked();
+	}
+	
+	@Transient
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return user.isAccountNonExpired();
+	}
+	
+	@Transient
+	@Override
+	public boolean isEnabled() {
+		return user.isEnabled();
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name = "id_user", nullable = false)
-    public User getUser()
-    {
-        return this.user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-
-    @Transient
-    @Override
-    public Collection<GrantedAuthority> getAuthorities()
-    {
-        Collection<GrantedAuthority> roles = user.getAuthorities();
-        roles.add(User.FAN_ROLE);
-        return roles;
-    }
-
-    @Transient
-    @Override
-    public String getPassword()
-    {
-        return user.getPassword();
-    }
-
-    @Transient
-    @Override
-    public String getUsername()
-    {
-        return user.getUsername();
-    }
-
-    @Transient
-    @Override
-    public boolean isAccountNonExpired()
-    {
-        return user.isAccountNonExpired();
-    }
-
-    @Transient
-    @Override
-    public boolean isAccountNonLocked()
-    {
-        return user.isAccountNonLocked();
-    }
-
-    @Transient
-    @Override
-    public boolean isCredentialsNonExpired()
-    {
-        return user.isAccountNonExpired();
-    }
-
-    @Transient
-    @Override
-    public boolean isEnabled()
-    {
-        return user.isEnabled();
-    }
+	@Transient
+	public void mergeWithForm(Fan fanForm) {
+		this.user.mergeWithForm(fanForm.getUser());
+	}
 }

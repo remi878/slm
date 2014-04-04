@@ -45,10 +45,10 @@
 		<filter-name>sessionLogFilter</filter-name>
 		<filter-class>jp.slm.web.filter.SessionLogFilter</filter-class>
 	</filter>
-	<filter-mapping>
-		<filter-name>sessionLogFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>sessionLogFilter</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
 
 	<!-- HDIV Validator Filter -->
 	<!-- <filter> -->
@@ -70,6 +70,15 @@
 	</filter-mapping>
 
 	<!-- ############ servlets ############ -->
+
+     <servlet>
+        <servlet-name>avatarServlet</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+<!--     <servlet-mapping> -->
+<!--         <servlet-name>avatarServlet</servlet-name> -->
+<!--         <url-pattern>/img/avatar-*</url-pattern> -->
+<!--     </servlet-mapping> -->
 
 	<servlet>
 		<servlet-name>StickyCaptcha</servlet-name>

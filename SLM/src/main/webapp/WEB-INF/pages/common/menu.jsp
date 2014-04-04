@@ -6,7 +6,7 @@
 	<div class="clear-both w100 no-marge"></div>
 	<div id="logo-wrapper">
 		<div id="logo-rel">
-			<a id='logo' href='<c:url value="/" />'> <img src="./img/slm-logo.png" /> </a>
+			<a id='logo' href='<c:url value="/" />'> <img src="<c:url value="/img/slm-logo.png"/>" /> </a>
 		</div>
 	</div>
 	<div id="menu-wrapper">

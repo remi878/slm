@@ -15,9 +15,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.GroupSequence;
+import javax.validation.Valid;
 
 import jp.slm.business.bean.generic.GenericLongIdBean;
-import jp.slm.web.form.ArtistRegistrationForm;
+import jp.slm.web.validation.group.FirstValidationGroup;
+import jp.slm.web.validation.group.SecondValidationGroup;
+import jp.slm.web.validation.group.ThirdValidationGroup;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,193 +32,172 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "artist")
-public class Artist extends GenericLongIdBean implements UserDetails
-{
-    private User user;
-
-    private String youtube;
-
-    private String vimeo;
-
-    private String groupPhilos;
-
-    private Set<Comment> comments = new HashSet<Comment>(0);
-
-    private Set<Event> events = new HashSet<Event>(0);
-
-    private Set<Picture> pictures = new HashSet<Picture>(0);
-
-    private Set<Mp3> mp3s = new HashSet<Mp3>(0);
-
-    private Set<Bandmember> bandmembers = new HashSet<Bandmember>(0);
-
-    private Set<ArtistRate> artistRates = new HashSet<ArtistRate>(0);
-
-
-    public Artist(ArtistRegistrationForm artistForm) {
-    	this.user = new User(artistForm);
-    	this.youtube=artistForm.getYoutube();
-    	this.vimeo=artistForm.getVimeo();
-    	this.groupPhilos=artistForm.getGroupPhylos();
+@GroupSequence({ FirstValidationGroup.class, SecondValidationGroup.class, ThirdValidationGroup.class, User.class ,Artist.class})
+public class Artist extends GenericLongIdBean implements UserDetails {
+	
+	@Valid
+	private User user;
+	
+	private String youtube;
+	
+	private String vimeo;
+	
+	private String groupPhilos;
+	
+	private Set<Comment> comments = new HashSet<Comment>(0);
+	
+	private Set<Event> events = new HashSet<Event>(0);
+	
+	private Set<Picture> pictures = new HashSet<Picture>(0);
+	
+	private Set<Mp3> mp3s = new HashSet<Mp3>(0);
+	
+	private Set<Bandmember> bandmembers = new HashSet<Bandmember>(0);
+	
+	private Set<ArtistRate> artistRates = new HashSet<ArtistRate>(0);
+	
+	public Artist() {}
+	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "id_user")
+	public User getUser() {
+		return this.user;
 	}
-
-	@ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinColumn(name = "id_user")
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Column(name = "youtube", length = 128)
-    public String getYoutube()
-    {
-        return this.youtube;
-    }
-
-    public void setYoutube(String youtube)
-    {
-        this.youtube = youtube;
-    }
-
-    @Column(name = "wimeo", length = 128)
-    public String getVimeo()
-    {
-        return this.vimeo;
-    }
-
-    public void setVimeo(String vimeo)
-    {
-        this.vimeo = vimeo;
-    }
-
-    @Column(name = "group_phylos", length = 512)
-    public String getGroupPhilos()
-    {
-        return this.groupPhilos;
-    }
-
-    public void setGroupPhilos(String groupPhilos)
-    {
-        this.groupPhilos = groupPhilos;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
-    public Set<Comment> getComments()
-    {
-        return this.comments;
-    }
-
-    public void setComments(Set<Comment> comments)
-    {
-        this.comments = comments;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
-    public Set<Event> getEvents()
-    {
-        return this.events;
-    }
-
-    public void setEvents(Set<Event> events)
-    {
-        this.events = events;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
-    public Set<Picture> getPictures()
-    {
-        return this.pictures;
-    }
-
-    public void setPictures(Set<Picture> pictures)
-    {
-        this.pictures = pictures;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
-    public Set<Mp3> getMp3s()
-    {
-        return this.mp3s;
-    }
-
-    public void setMp3s(Set<Mp3> mp3s)
-    {
-        this.mp3s = mp3s;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
-    public Set<Bandmember> getBandmembers()
-    {
-        return this.bandmembers;
-    }
-
-    public void setBandmembers(Set<Bandmember> bandmembers)
-    {
-        this.bandmembers = bandmembers;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
-    public Set<ArtistRate> getArtistRates()
-    {
-        return this.artistRates;
-    }
-
-    public void setArtistRates(Set<ArtistRate> artistRates)
-    {
-        this.artistRates = artistRates;
-    }
-
-    @Transient
-    @Override
-    public Collection<GrantedAuthority> getAuthorities()
-    {
-        Collection<GrantedAuthority> roles = user.getAuthorities();
-        roles.add(User.ARTIST_ROLE);
-        return roles;
-    }
-
-    @Transient
-    @Override
-    public String getPassword()
-    {
-        return user.getPassword();
-    }
-
-    @Transient
-    @Override
-    public String getUsername()
-    {
-        return user.getUsername();
-    }
-
-    @Transient
-    @Override
-    public boolean isAccountNonExpired()
-    {
-        return user.isAccountNonExpired();
-    }
-
-    @Transient
-    @Override
-    public boolean isAccountNonLocked()
-    {
-        return user.isAccountNonLocked();
-    }
-
-    @Transient
-    @Override
-    public boolean isCredentialsNonExpired()
-    {
-        return user.isAccountNonExpired();
-    }
-
-    @Transient
-    @Override
-    public boolean isEnabled()
-    {
-        return user.isEnabled();
-    }
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	@Column(name = "youtube", length = 128)
+	public String getYoutube() {
+		return this.youtube;
+	}
+	
+	public void setYoutube(String youtube) {
+		this.youtube = youtube;
+	}
+	
+	@Column(name = "wimeo", length = 128)
+	public String getVimeo() {
+		return this.vimeo;
+	}
+	
+	public void setVimeo(String vimeo) {
+		this.vimeo = vimeo;
+	}
+	
+	@Column(name = "group_phylos", length = 512)
+	public String getGroupPhilos() {
+		return this.groupPhilos;
+	}
+	
+	public void setGroupPhilos(String groupPhilos) {
+		this.groupPhilos = groupPhilos;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
+	public Set<Comment> getComments() {
+		return this.comments;
+	}
+	
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
+	public Set<Event> getEvents() {
+		return this.events;
+	}
+	
+	public void setEvents(Set<Event> events) {
+		this.events = events;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
+	public Set<Picture> getPictures() {
+		return this.pictures;
+	}
+	
+	public void setPictures(Set<Picture> pictures) {
+		this.pictures = pictures;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
+	public Set<Mp3> getMp3s() {
+		return this.mp3s;
+	}
+	
+	public void setMp3s(Set<Mp3> mp3s) {
+		this.mp3s = mp3s;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
+	public Set<Bandmember> getBandmembers() {
+		return this.bandmembers;
+	}
+	
+	public void setBandmembers(Set<Bandmember> bandmembers) {
+		this.bandmembers = bandmembers;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "artist")
+	public Set<ArtistRate> getArtistRates() {
+		return this.artistRates;
+	}
+	
+	public void setArtistRates(Set<ArtistRate> artistRates) {
+		this.artistRates = artistRates;
+	}
+	
+	@Transient
+	@Override
+	public Collection<GrantedAuthority> getAuthorities() {
+		Collection<GrantedAuthority> roles = user.getAuthorities();
+		roles.add(User.ARTIST_ROLE);
+		return roles;
+	}
+	
+	@Transient
+	@Override
+	public String getPassword() {
+		return user.getPassword();
+	}
+	
+	@Transient
+	@Override
+	public String getUsername() {
+		return user.getUsername();
+	}
+	
+	@Transient
+	@Override
+	public boolean isAccountNonExpired() {
+		return user.isAccountNonExpired();
+	}
+	
+	@Transient
+	@Override
+	public boolean isAccountNonLocked() {
+		return user.isAccountNonLocked();
+	}
+	
+	@Transient
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return user.isAccountNonExpired();
+	}
+	
+	@Transient
+	@Override
+	public boolean isEnabled() {
+		return user.isEnabled();
+	}
+	
+	@Transient
+	public void mergeWithForm(Artist artistForm) {
+		this.user.mergeWithForm(artistForm.getUser());
+		this.youtube = artistForm.getYoutube();
+		this.vimeo = artistForm.getVimeo();
+		this.groupPhilos = artistForm.getGroupPhilos();
+	}
 }

@@ -13,6 +13,13 @@
 	</c:if>
 </spring:bind>
 
+<spring:bind path="${path}">
+	<c:forEach var="error" items="${status.errorMessages}" varStatus="status">
+		${error}
+		<c:if test="${!status.last}">,</c:if>
+	</c:forEach>
+</spring:bind>
+
 <div class="fieldBox">
 	<div class="fieldError error">
 		<form:errors path="${field}" cssclass="error" />

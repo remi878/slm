@@ -6,6 +6,7 @@ import java.util.List;
 
 import jp.slm.business.dao.generic.GenericDao;
 
+import org.hibernate.Cache;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -31,19 +32,16 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings({ "unchecked", "serial" })
 @Repository
 public abstract class GenericDaoImpl<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK>, Serializable {
-
-	protected final Logger LOG = LoggerFactory.getLogger(getClass());
 	
+	protected final Logger LOG = LoggerFactory.getLogger(getClass());
 	
 	/** The type. */
 	protected Class<T> type;
-
 	
 	/**
 	 * The Constructor.
 	 */
-	protected GenericDaoImpl(){
-	}
+	protected GenericDaoImpl() {}
 	
 	/**
 	 * The Constructor.
@@ -348,6 +346,55 @@ public abstract class GenericDaoImpl<T, PK extends Serializable> extends Hiberna
 	 */
 	public void refreshObject(Object o) {
 		getHibernateTemplate().refresh(o);
+	}
+	
+	/**
+	 * (methode de remplacement) {@inheritDoc}
+	 * 
+	 * @see jp.slm.business.dao.generic.GenericDao#clearSession()
+	 */
+	public void clearSession() {
+		currentSession().clear();
+	}
+	
+	/**
+	 * (methode de remplacement) {@inheritDoc}
+	 * 
+	 * @see jp.slm.business.dao.generic.GenericDao#clearCache()
+	 */
+	public void clearCache() {
+		Cache cache = getCache();
+		if (cache != null) {
+			cache.evictAllRegions();
+		}
+	}
+	
+	/**
+	 * (methode de remplacement) {@inheritDoc}
+	 * 
+	 * @see jp.slm.business.dao.generic.GenericDao#clearClassCache()
+	 */
+	public void clearClassCache() {
+		Cache cache = getCache();
+		if(cache!=null){
+			cache.evictEntityRegion(this.type);
+		}
+	}
+	
+	/**
+	 * (methode de remplacement) {@inheritDoc}
+	 * 
+	 * @see jp.slm.business.dao.generic.GenericDao#clearInstanceCache()
+	 */
+	public void clearInstanceCache(PK id) {
+		Cache cache = getCache();
+		if (cache != null) {
+			cache.evictEntity(this.type, id);
+		}
+	}
+	
+	private Cache getCache() {
+		return getSessionFactory().getCache();
 	}
 	
 	/**

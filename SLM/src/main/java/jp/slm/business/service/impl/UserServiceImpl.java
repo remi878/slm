@@ -8,9 +8,9 @@ import jp.slm.business.dao.FanDao;
 import jp.slm.business.dao.UserDao;
 import jp.slm.business.service.UserService;
 import jp.slm.business.service.generic.impl.GenericLongIdBeanServiceImpl;
+import jp.slm.business.util.MailConfirmationToken;
 import jp.slm.business.util.PasswordValidator;
-import jp.slm.web.form.ArtistRegistrationForm;
-import jp.slm.web.form.FanRegistrationForm;
+import jp.slm.business.util.ResetPasswordToken;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -56,6 +56,7 @@ public class UserServiceImpl extends GenericLongIdBeanServiceImpl<User> implemen
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		UserDetails ud = null;
 		if (StringUtils.hasText(email)) {
+			dao.clearClassCache();
 			User user = dao.findByProperty(EMAIL, email);
 			if (user != null) {
 				ud = user;
@@ -114,9 +115,7 @@ public class UserServiceImpl extends GenericLongIdBeanServiceImpl<User> implemen
 			} else {
 				throw new AccessDeniedException("Unknow user try to delete null");
 			}
-			
 		}
-		
 	}
 	
 	@Override
@@ -126,31 +125,73 @@ public class UserServiceImpl extends GenericLongIdBeanServiceImpl<User> implemen
 			currentUser.setPassword(pwdEncoder.encode(newPassword));
 			dao.update(currentUser);
 		} else {
+			if (!pwdEncoder.matches(oldPassword, currentUser.getPassword())) {
+				// sleep to prevent to fast failure test (harden brute force attack...)
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException ignore) {}
+			}
 			throw new BadCredentialsException("old or new Password invalid");
 		}
 	}
 	
-//	@Transactional
+	private boolean isResetPasswordTokenValid(ResetPasswordToken resetPasswordToken) {
+		boolean res = false;
+		if (resetPasswordToken != null && resetPasswordToken.isValid()) {
+			User user = dao.findById(resetPasswordToken.getUserId());
+			if (user.isEnabled() && user.getAuthToken() != null && user.getAuthToken().equals(resetPasswordToken.getUserAuthToken())) {
+				res = true;
+			}
+		}
+		return res;
+	}
+	
+	public boolean resetPassword(String resetToken, String newPassword) {
+		boolean res = false;
+		ResetPasswordToken resetPasswordToken = ResetPasswordToken.readToken(resetToken);
+		if (isResetPasswordTokenValid(resetPasswordToken) && PasswordValidator.validate(newPassword)) {
+			User user = dao.findById(resetPasswordToken.getUserId());
+			user.setUncryptedPassword(newPassword);
+			dao.update(user);
+			res = true;
+		}
+		return res;
+	}
+	
 	@Override
 	public boolean userExists(String email) {
 		return dao.existByProperty(EMAIL, email);
 	}
 	
-	public User getCurrentUser() {
-		User res = null;
+	public UserDetails getCurrentUserDetails() {
+		UserDetails res = null;
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		if (securityContext != null) {
 			Authentication auth = securityContext.getAuthentication();
 			if (auth != null && !(auth instanceof AnonymousAuthenticationToken)) {
 				Object obj = auth.getPrincipal();
-				if ((obj != null) && obj instanceof User) {
-					res = (User) obj;
+				if ((obj != null) && obj instanceof UserDetails) {
+					res = (UserDetails) obj;
 				}
 			}
 		}
 		return res;
 	}
-
+	
+	public User getCurrentUser() {
+		User res = null;
+		UserDetails ud = getCurrentUserDetails();
+		if (ud != null) {
+			if (ud instanceof User) {
+				res = (User) ud;
+			} else if (ud instanceof Artist) {
+				res = ((Artist) ud).getUser();
+			} else if (ud instanceof Fan) {
+				res = ((Fan) ud).getUser();
+			}
+		}
+		return res;
+	}
 	
 	private boolean isAllowedToManage(String email) {
 		boolean res = false;
@@ -160,26 +201,33 @@ public class UserServiceImpl extends GenericLongIdBeanServiceImpl<User> implemen
 		}
 		return res;
 	}
-
+	
 	@Override
-	public Fan signUpFan(FanRegistrationForm fanForm) {
-		Fan fan = new Fan(fanForm);
+	public Fan signUpFan(Fan fan) {
 		fanDao.create(fan);
 		userSignup(fan.getUser());
 		return fan;
 	}
-
+	
 	@Override
-	@Transactional
-	public Artist signUpArtist(ArtistRegistrationForm artistForm) {
-		Artist artist = new Artist(artistForm);
+	public Artist signUpArtist(Artist artist) {
 		artistDao.create(artist);
 		userSignup(artist.getUser());
 		return artist;
 	}
-
+	
 	private void userSignup(User user) {
+		MailConfirmationToken mailConfirmationToken = MailConfirmationToken.getNewToken(user.getId());
+		user.setAuthToken(mailConfirmationToken.getUserAuthToken());
+		dao.update(user);
 		// TODO mail ...
 		
+	}
+	
+	public void lostPassword(User user) {
+		ResetPasswordToken resetPasswordToken = ResetPasswordToken.getNewToken(user.getId());
+		user.setAuthToken(resetPasswordToken.getUserAuthToken());
+		dao.update(user);
+		// TODO handle lost password (mail with link to reset password page with resetPasswordToken.toString() in param)
 	}
 }

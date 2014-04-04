@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import jp.slm.business.bean.generic.GenericLongIdBean;
 
@@ -20,7 +21,10 @@ import jp.slm.business.bean.generic.GenericLongIdBean;
 @Table(name = "avatar")
 public class Avatar extends GenericLongIdBean
 {
-    private boolean isSystem;
+	@Transient
+	public static final int SIZE = 100;
+	
+    private boolean isSystem = false;
 
     private Date inDate;
 

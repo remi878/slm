@@ -17,11 +17,26 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.GroupSequence;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
 import jp.slm.business.bean.generic.GenericLongIdBean;
 import jp.slm.common.util.PasswordEncoderHolder;
-import jp.slm.web.form.UserRegistrationForm;
+import jp.slm.web.validation.annotation.PasswordField;
+import jp.slm.web.validation.group.FirstValidationGroup;
+import jp.slm.web.validation.group.SecondValidationGroup;
+import jp.slm.web.validation.group.ThirdValidationGroup;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.SafeHtml;
+import org.hibernate.validator.constraints.URL;
+import org.hibernate.validator.constraints.SafeHtml.WhiteListType;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +47,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "user")
+@GroupSequence({ FirstValidationGroup.class, SecondValidationGroup.class, ThirdValidationGroup.class, User.class })
 public class User extends GenericLongIdBean implements UserDetails {
+	
+	@Transient
+	public static final String ANONYMOUS_ROLE_STR = "ROLE_ANONYMOUS";
+	
+	@Transient
+	public static final GrantedAuthority ANONYMOUS_ROLE = new SimpleGrantedAuthority(ANONYMOUS_ROLE_STR);
 	
 	@Transient
 	public static final String ADMIN_ROLE_STR = "ROLE_ADMIN";
@@ -53,12 +75,38 @@ public class User extends GenericLongIdBean implements UserDetails {
 	public static final GrantedAuthority FAN_ROLE = new SimpleGrantedAuthority(FAN_ROLE_STR);
 	
 	@Transient
-	public static final List<GrantedAuthority> ROLE_LIST = Arrays.asList(FAN_ROLE, ARTIST_ROLE, ADMIN_ROLE);
+	public static final GrantedAuthority[] AUTHANTICATED_ROLE_TAB = { FAN_ROLE, ARTIST_ROLE, ADMIN_ROLE };
+	
+	@Transient
+	public static final List<GrantedAuthority> AUTHANTICATED_ROLE_LIST = Arrays.asList(AUTHANTICATED_ROLE_TAB);
+	
+	@Transient
+	public static final GrantedAuthority[] ALL_ROLE_TAB = (GrantedAuthority[]) ArrayUtils.add(AUTHANTICATED_ROLE_TAB, ANONYMOUS_ROLE);
+	
+	@Transient
+	public static final List<GrantedAuthority> ALL_ROLE_LIST = Arrays.asList(ALL_ROLE_TAB);
+	
+	@Transient
+	public static final String[] AUTHANTICATED_ROLE_STR_TAB = { FAN_ROLE_STR, ARTIST_ROLE_STR, ADMIN_ROLE_STR };
+	
+	@Transient
+	public static final List<String> AUTHANTICATED_STR_ROLE_LIST = Arrays.asList(AUTHANTICATED_ROLE_STR_TAB);
+	
+	@Transient
+	public static final String[] ALL_ROLE_STR_TAB = (String[]) ArrayUtils.add(AUTHANTICATED_ROLE_STR_TAB, ANONYMOUS_ROLE_STR);
+	
+	@Transient
+	public static final List<String> ALL_ROLE_STR_LIST = Arrays.asList(ALL_ROLE_STR_TAB);
 	
 	private Avatar avatar;
-	
+
+	@NotEmpty(groups = { FirstValidationGroup.class })
+	@Email(groups = { ThirdValidationGroup.class })
+	@Size(min = 7, max = 64, groups = { SecondValidationGroup.class })
 	private String email;
-	
+
+	@NotEmpty(groups = { FirstValidationGroup.class })
+	@PasswordField(groups = { SecondValidationGroup.class })
 	private String password;
 	
 	private boolean enabled;
@@ -72,35 +120,37 @@ public class User extends GenericLongIdBean implements UserDetails {
 	private Date creationDate;
 	
 	private Date lastLogin;
-	
+
+	@NotEmpty(groups = { FirstValidationGroup.class })
+	@Size(min = 2, max = 64, groups = { SecondValidationGroup.class })
+	@SafeHtml(whitelistType = WhiteListType.NONE)
 	private String firstName;
-	
+
+	@NotEmpty(groups = { FirstValidationGroup.class })
+	@Size(min = 2, max = 64, groups = { SecondValidationGroup.class })
+	@SafeHtml(whitelistType = WhiteListType.NONE)
 	private String lastName;
 	
 	private Boolean gender;
-	
+
+	@NotNull(groups = { FirstValidationGroup.class })
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@Past(groups = { SecondValidationGroup.class })
 	private Date birthdate;
-	
+
+	@Size(min = 2, max = 32, groups = { SecondValidationGroup.class })
+	@SafeHtml(whitelistType = WhiteListType.NONE)
 	private String nickname;
-	
+
+	@Size(max = 512, groups = { SecondValidationGroup.class })
+	@SafeHtml(whitelistType = WhiteListType.NONE)
 	private String description;
-	
+
+	@URL(groups = { ThirdValidationGroup.class })
+	@Size(min = 4, max = 64, groups = { SecondValidationGroup.class })
 	private String websiteUrl;
 	
 	public User() {}
-	
-	public User(UserRegistrationForm urf) {
-		this.email = urf.getEmail();
-		setUncryptedPassword(urf.getPassword());
-		this.creationDate = new Date();
-		this.firstName = urf.getFirstName();
-		this.lastName = urf.getLastName();
-		this.gender = urf.getGender();
-		this.birthdate = urf.getBirthdate();
-		this.nickname = urf.getNickname();
-		this.description = urf.getDescription();
-		this.websiteUrl = urf.getWebsiteUrl();
-	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_avatar")
@@ -288,5 +338,31 @@ public class User extends GenericLongIdBean implements UserDetails {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
+	}
+	
+	@Transient
+	public String getDisplayName() {
+		String displayName = null;
+		if (StringUtils.isNotBlank(this.nickname)) {
+			displayName = this.nickname;
+		} else if (StringUtils.isNotBlank(this.lastName) && StringUtils.isNotBlank(this.firstName)) {
+			displayName = this.lastName + " " + this.firstName;
+		} else {
+			displayName = StringUtils.EMPTY;
+		}
+		return displayName;
+	}
+	
+	@Transient
+	public void mergeWithForm(User userForm) {
+		this.birthdate = userForm.birthdate;
+		this.description = userForm.description;
+		this.firstName = userForm.firstName;
+		this.nickname = userForm.nickname;
+		this.lastName = userForm.lastName;
+		this.gender = userForm.gender;
+		this.websiteUrl = userForm.websiteUrl;
+		this.email = userForm.email;
+		
 	}
 }

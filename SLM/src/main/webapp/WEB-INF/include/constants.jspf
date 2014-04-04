@@ -1,11 +1,36 @@
 <%-- <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%> --%>
+<%@ page import="static jp.slm.web.controller.generic.GenericController.*"%>
+<%@ include file="/WEB-INF/include/taglib-def.jspf"%>
 
 <%-- Constantes for Spring Webflow --%>
 
-<c:set var="EVENTID_FIELD_PREFIX" value="_eventId_"/>
-<c:set var="EVENTID_FIELDURL_PREFIX" value="_eventId"/>
-<c:set var="FLOWEXECUTIONID_FIELD_NAME" value="_flowExecutionKey"/>
+<c:set var="EVENTID_FIELD_PREFIX" value="_eventId_" />
+<c:set var="EVENTID_FIELDURL_PREFIX" value="_eventId" />
+<c:set var="FLOWEXECUTIONID_FIELD_NAME" value="_flowExecutionKey" />
 
 
 <%-- Constantes for form --%>
-<c:set var="REQUIRED" value="<span class='req'>*</span>&#160;"/>
+<c:set var="REQUIRED" value="<span class='req'>*</span>&#160;" />
+
+
+<!-- security -->
+<security:authentication var="principal" property="principal" />
+
+<c:set var="isAuthenticated" value="${false}" />
+<security:authorize access="isAuthenticated()">
+	<c:set var="isAuthenticated" value="${true}" />
+</security:authorize>
+
+<c:set var="role" value="none" />
+<security:authorize ifAllGranted="ROLE_ANONYMOUS">
+	<c:set var="role" value="ROLE_ANONYMOUS" />
+</security:authorize>
+<security:authorize ifAllGranted="ROLE_FAN">
+	<c:set var="role" value="ROLE_FAN" />
+</security:authorize>
+<security:authorize ifAllGranted="ROLE_ARTIST">
+	<c:set var="role" value="ROLE_ARTIST" />
+</security:authorize>
+<security:authorize ifAllGranted="ROLE_ADMIN">
+	<c:set var="role" value="ROLE_ADMIN" />
+</security:authorize>

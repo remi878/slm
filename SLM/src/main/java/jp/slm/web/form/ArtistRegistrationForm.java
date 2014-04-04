@@ -1,7 +1,9 @@
 package jp.slm.web.form;
 
+import javax.validation.GroupSequence;
 import javax.validation.constraints.Size;
 
+import jp.slm.web.validation.group.FirstValidationGroup;
 import jp.slm.web.validation.group.SecondValidationGroup;
 import jp.slm.web.validation.group.ThirdValidationGroup;
 
@@ -11,6 +13,7 @@ import org.hibernate.validator.constraints.URL;
 import org.hibernate.validator.constraints.SafeHtml.WhiteListType;
 
 @SuppressWarnings("serial")
+@GroupSequence({ FirstValidationGroup.class, SecondValidationGroup.class, ThirdValidationGroup.class, ArtistRegistrationForm.class, UserRegistrationForm.class })
 public class ArtistRegistrationForm extends UserRegistrationForm {
 
 	@URL(groups = { ThirdValidationGroup.class })
