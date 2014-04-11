@@ -8,7 +8,7 @@
 	<c:set var="formId" value="user" />
 </c:if>
 
-<form:form commandName="user" id="${formId}RegistrationForm" servletRelativeAction="/fan-signup" method="POST">
+<form:form commandName="user" id="fanRegistrationForm" servletRelativeAction="<%= FAN_SIGNUP_URL%>" method="POST">
 	<div class="formError error">
 		<form:errors />
 	</div>
@@ -44,9 +44,12 @@
 		<slm:inputBox label="Your site url (optional)" type="url" field="websiteUrl" required="false" size="30" maxlength="64" placeholder="mydomain.com"/>
 	</div>
 	
-	<tiles:insertAttribute name="ext" />
 	
-	
+	<div id="fanFields">
+		<h3>Specific fan informations here ...</h3>
+		<br/><i> ... nothing yet ...</i><br/>
+	</div>
+
 	<div id="captchaFields">
 		<h3>Captcha (security against bots) :</h3>
 		<slm:captchaBox />

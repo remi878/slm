@@ -11,16 +11,16 @@
 		<c:if test="${param.logout != null}">
 			<p>You have been logged out.</p>
 		</c:if>
-		<form action='<spring:url value="/j_spring_security_check"/>' method="post">
-			<input type="text" name="j_username" placeholder="email" size="32" maxlength="64" /><br /> 
-			<input type="password" name="j_password" placeholder="password" size="32" maxlength="64" /><br />
-			<input type="checkbox" name="_spring_security_remember_me"><label for="_spring_security_remember_me">Remember me</label><br /> 
+		<form action='<spring:url value="<%=LOGIN_PROCESS_URL%>"/>' method="post">
+			<input type="text" name="<%=SPRING_LOGIN_USERNAME%>" placeholder="email" size="32" maxlength="64" /><br /> 
+			<input type="password" name="<%=SPRING_LOGIN_PASSWORD%>" placeholder="password" size="32" maxlength="64" /><br />
+			<input type="checkbox" name="<%=SPRING_LOGIN_REMEMBER_ME%>"><label for="<%=SPRING_LOGIN_REMEMBER_ME%>">Remember me</label><br /> 
 			<input type="submit" value="Login" /><br />
 		</form>
 	</security:authorize>
 	<security:authorize access="isAuthenticated()">
 		This page is not available for authenticated users !<br/>
-		Please, <a href="<c:url value="/j_spring_security_logout"/>"><img src="<c:url value="/img/logout.png"/>"/>logout</a> before, if you want to go to this page.
+		Please, <a href="<c:url value="<%=LOGOUT_PROCESS_URL%>"/>"><img src="<c:url value="/img/logout.png"/>" alt="logout"/>logout</a> before, if you want to go to this page.
 	</security:authorize>
 </div>
 <div class="clear-both w100 no-marge"></div>
