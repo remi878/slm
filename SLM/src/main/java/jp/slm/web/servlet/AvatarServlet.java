@@ -13,6 +13,7 @@ import jp.slm.business.bean.User;
 import jp.slm.business.service.UserService;
 import jp.slm.web.listener.ApplicationListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,17 @@ public class AvatarServlet implements HttpRequestHandler {
 	
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		User user = userService.getCurrentUser();
+		User user = null;
+		if (request.getParameter("userId") != null && StringUtils.isNumeric(request.getParameter("userId"))) {
+			try {
+				Long userId = Long.parseLong(request.getParameter("userId"));
+				user = userService.findById(userId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (request.getRequestURI().contains("current")) {
+			user = userService.getCurrentUser();
+		}
 		if (user != null && user.getAvatar() != null) {
 			Avatar avatar = user.getAvatar();
 			byte[] data = avatar.getAvatarData();
@@ -46,10 +57,10 @@ public class AvatarServlet implements HttpRequestHandler {
 			} catch (IOException e) {
 				LOG.error("Error avatar io :", e);
 				e.printStackTrace();
-				sendRedirectToDefaultAvatar(request,response);
+				sendRedirectToDefaultAvatar(request, response);
 			}
 		} else {
-			sendRedirectToDefaultAvatar(request,response);
+			sendRedirectToDefaultAvatar(request, response);
 		}
 	}
 	

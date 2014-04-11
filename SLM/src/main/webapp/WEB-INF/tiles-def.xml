@@ -20,28 +20,7 @@
             </definition>
         </put-attribute>
     </definition>
-
-    <definition name=".home" extends=".slmLayout">
-        <put-attribute name="content" value="/WEB-INF/pages/home-test.jsp" cascade="true" />
-    </definition>
-
-<!--     <definition name=".test" extends=".slmLayout"> -->
-<!--         <put-attribute name="content" value="/WEB-INF/pages/test.jsp" cascade="true" /> -->
-<!--     </definition> -->
-
-<!--     <definition name=".login-form" extends=".slmLayout"> -->
-<!--         <put-attribute name="content" value="/WEB-INF/pages/login-form.jsp" cascade="true" /> -->
-<!--     </definition> -->
-
-    <definition name=".*-signup-form" extends=".slmLayout">
-        <put-attribute name="content" value=".{1}-signup" cascade="true" />
-    </definition>
-    
-    <definition name=".*-signup" template="/WEB-INF/pages/layout/userSignupLayout.jsp">
-    	<put-attribute name="formId" value="{1}" />
-        <put-attribute name="ext" value="/WEB-INF/pages/{1}-signup-ext.jsp" cascade="true" />
-    </definition>
-    
+        
     <definition name=".*" extends=".slmLayout">
         <put-attribute name="content" value="/WEB-INF/pages/{1}.jsp" cascade="true" />
     </definition>

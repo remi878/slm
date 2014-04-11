@@ -1,13 +1,7 @@
 package jp.slm.web.controller;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 
-import javax.imageio.ImageIO;
 import javax.validation.Valid;
 
 import jp.slm.business.bean.Artist;
@@ -22,6 +16,7 @@ import jp.slm.web.form.ArtistRegistrationForm;
 import jp.slm.web.form.FanRegistrationForm;
 import jp.slm.web.form.NewPasswordForm;
 import jp.slm.web.form.UserRegistrationForm;
+import jp.slm.web.util.AvatarUtil;
 import jp.slm.web.util.FormConverter;
 
 import org.apache.commons.lang.StringUtils;
@@ -66,7 +61,7 @@ public class UserController extends GenericController {
 				User user = (User) userService.loadUserByUsername(email);
 				if (user.isEnabled()) {
 					userService.lostPassword(user);
-					view = LOGIN_FORM_PAGE;
+					view = REDIRECT+LOST_PASSWORD_URL;
 				} else {
 					result.addError(new ObjectError(EMAIL, "error.account.disabled"));
 				}
@@ -274,7 +269,7 @@ public class UserController extends GenericController {
 		String view = REDIRECT + CHANGE_AVATAR_URL;
 		byte[] imageData = null;
 		if (file != null && !file.isEmpty() & file.getContentType() != null && file.getContentType().toLowerCase().contains("image/")) {
-			imageData = getImage(file);
+			imageData = AvatarUtil.getScaledImage(file);
 		}
 		if (imageData == null) {
 			result.rejectValue(FILE, "error.invalid.image", "invalid image");
@@ -292,40 +287,5 @@ public class UserController extends GenericController {
 			view = REDIRECT + USER_PROFILE_URL;
 		}
 		return view;
-	}
-	
-	private byte[] getImage(MultipartFile file) {
-		BufferedImage image = null;
-		InputStream is = null;
-		try {
-			is = file.getInputStream();
-			image = ImageIO.read(is);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (is != null) try {
-				is.close();
-			} catch (IOException ignore) {}
-		}
-		if (image != null) {
-			int height = image.getHeight();
-			int width = image.getWidth();
-			if (height != width || width > Avatar.SIZE) {
-				image = scaleImage(image, Avatar.SIZE);
-			}
-		}
-		return getImageData(image);
-	}
-	
-	private byte[] getImageData(BufferedImage image) {
-		return ((DataBufferByte) image.getData().getDataBuffer()).getData();
-	}
-	
-	private BufferedImage scaleImage(BufferedImage originalImage, int size) {
-		BufferedImage scaledBI = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g = scaledBI.createGraphics();
-		g.drawImage(originalImage, 0, 0, size, size, null);
-		g.dispose();
-		return scaledBI;
 	}
 }

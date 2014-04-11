@@ -16,119 +16,135 @@ public abstract class GenericController {
 	
 	/* KEY WORDS */
 	
-	protected static final String EMPTY = StringUtils.EMPTY;
+	public static final String EMPTY = StringUtils.EMPTY;
 	
-	protected static final String DOT = ".";
+	public static final String DOT = ".";
 	
-	protected static final String PAGE_SEP = "-";
+	public static final String PAGE_SEP = "-";
 	
-	protected static final String URL_SEP = "/";
+	public static final String URL_SEP = "/";
 	
-	protected static final String HOME_STR = "home";
+	public static final String HOME_STR = "home";
 	
-	protected static final String INDEX_STR = "index";
+	public static final String INDEX_STR = "index";
 	
-	protected static final String ID = "id";
+	public static final String ID = "id";
 	
-	protected static final String FAN = "fan";
+	public static final String FAN = "fan";
 	
-	protected static final String ARTIST = "artist";
+	public static final String ARTIST = "artist";
 	
-	protected static final String USER_STR = "user";
+	public static final String USER_STR = "user";
 	
-	protected static final String ADMIN = "admin";
+	public static final String ADMIN = "admin";
 	
-	protected static final String SUCESS = "sucess";
+	public static final String SUCESS = "sucess";
 	
-	protected static final String PROFILE_STR = "profile";
+	public static final String PROFILE_STR = "profile";
 	
-	protected static final String EDIT_STR = "edit";
+	public static final String EDIT_STR = "edit";
 	
-	protected static final String SAVE_STR = "save";
+	public static final String SAVE_STR = "save";
 	
-	protected static final String SIGNUP_STR = "signup";
+	public static final String SIGNUP_STR = "signup";
 	
-	protected static final String FORM_STR = "form";
+	public static final String FORM_STR = "form";
 	
-	protected static final String LOGIN_STR = "login";
+	public static final String LOGIN_STR = "login";
 	
-	protected static final String PASSWORD_STR = "password";
+	public static final String PASSWORD_STR = "password";
 	
-	protected static final String AVATAR_STR = "avatar";
+	public static final String OLD_PASSWORD_STR = "oldPassword";
 	
-	protected static final String EMAIL = "email";
+	public static final String CONFIRM_PASSWORD_STR = "confirmPassword";
 	
-	protected static final String FILE = "file";
+	public static final String CAPTCHA_REPONSE_STR = "captchaResponse";
 	
-	protected static final String REDIRECT = UrlBasedViewResolver.REDIRECT_URL_PREFIX;
+	public static final String AVATAR_STR = "avatar";
 	
-	protected static final String FORWARD = UrlBasedViewResolver.FORWARD_URL_PREFIX;
+	public static final String EMAIL = "email";
 	
-	private static final String SPRING_LOGIN_URL_TOKEN = "j_spring_security_check";
+	public static final String FILE = "file";
 	
-	private static final String SPRING_LOGOUT_URL_TOKEN = "j_spring_security_check";
+	public static final String REDIRECT = UrlBasedViewResolver.REDIRECT_URL_PREFIX;
 	
-	protected static final String LOGIN_USERNAME = UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY;
+	public static final String FORWARD = UrlBasedViewResolver.FORWARD_URL_PREFIX;
 	
-	protected static final String LOGIN_PASSWOR = UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY;
+	public static final String SPRING_LOGIN_URL_TOKEN = "j_spring_security_check";
 	
-	protected static final String URL_WILDCARD = "*";
+	public static final String SPRING_LOGOUT_URL_TOKEN = "j_spring_security_check";
 	
-	protected static final String ERROR = "error";
+	public static final String SPRING_LOGIN_PASSWORD = "j_password";
 	
-	protected static final String TILES_PREFIX = DOT;
+	public static final String SPRING_LOGIN_USERNAME = "j_username";
 	
-	protected static final String MESSAGE = "MESSAGE";
+	public static final String SPRING_LOGIN_REMEMBER_ME = "_spring_security_remember_me";
 	
-	protected static final String DONE = "done";
+	public static final String LOGIN_USERNAME = UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY;
 	
-	protected static final String UPDATE_DONE = "update.done";
+	public static final String LOGIN_PASSWOR = UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY;
 	
-	protected static final String CREATION_DONE = "creation.done";
+	public static final String URL_WILDCARD = "*";
+	
+	public static final String ERROR = "error";
+	
+	public static final String TILES_PREFIX = DOT;
+	
+	public static final String MESSAGE = "MESSAGE";
+	
+	public static final String DONE = "done";
+	
+	public static final String UPDATE_DONE = "update.done";
+	
+	public static final String CREATION_DONE = "creation.done";
 	
 	/* Coposite Key words */
 	
-	protected static final String USER_ID = USER_STR + DOT + ID;
+	public static final String USER_ID = USER_STR + DOT + ID;
 	
-	protected static final String USER_PREFIX = USER_STR + PAGE_SEP;
+	public static final String USER_PREFIX = USER_STR + PAGE_SEP;
 	
-	protected static final String FAN_PREFIX = FAN + PAGE_SEP;
+	public static final String FAN_PREFIX = FAN + PAGE_SEP;
 	
-	protected static final String ARTIST_PREFIX = ARTIST + PAGE_SEP;
+	public static final String ARTIST_PREFIX = ARTIST + PAGE_SEP;
 	
-	protected static final String ADMIN_PREFIX = ADMIN + PAGE_SEP;
+	public static final String ADMIN_PREFIX = ADMIN + PAGE_SEP;
 	
-	protected static final String LOGIN_FORM = LOGIN_STR + PAGE_SEP + FORM_STR;
+	public static final String LOGIN_FORM = LOGIN_STR + PAGE_SEP + FORM_STR;
 	
-	protected static final String SIGNUP_FORM = SIGNUP_STR + PAGE_SEP + FORM_STR;
+	public static final String SIGNUP_FORM = SIGNUP_STR + PAGE_SEP + FORM_STR;
 	
-	protected static final String SIGNUP_SUCESS = SIGNUP_STR + PAGE_SEP + SUCESS;
+	public static final String SIGNUP_SUCESS = SIGNUP_STR + PAGE_SEP + SUCESS;
 	
-	protected static final String PROFILE_EXT_URL = URL_SEP + PROFILE_STR;
+	public static final String PROFILE_EXT_URL = URL_SEP + PROFILE_STR;
 	
-	protected static final String EDIT_PROFILE = EDIT_STR + PAGE_SEP + PROFILE_STR;
+	public static final String EDIT_PROFILE = EDIT_STR + PAGE_SEP + PROFILE_STR;
 	
-	protected static final String SAVE_PROFILE = SAVE_STR + PAGE_SEP + PROFILE_STR;
+	public static final String SAVE_PROFILE = SAVE_STR + PAGE_SEP + PROFILE_STR;
 	
-	protected static final String EDIT_PROFILE_EXT_URL = URL_SEP + EDIT_PROFILE;
+	public static final String EDIT_PROFILE_EXT_URL = URL_SEP + EDIT_PROFILE;
 	
-	protected static final String SAVE_PROFILE_EXT_URL = URL_SEP + SAVE_PROFILE;
+	public static final String SAVE_PROFILE_EXT_URL = URL_SEP + SAVE_PROFILE;
 	
-	protected static final String LOST_PASSWORD_STR = "lost-" + PASSWORD_STR;
+	public static final String LOST_PASSWORD_STR = "lost-" + PASSWORD_STR;
 	
-	protected static final String CHANGE_PASSWORD_STR = "change-" + PASSWORD_STR;
+	public static final String CHANGE_PASSWORD_STR = "change-" + PASSWORD_STR;
 	
-	protected static final String CHANGE_AVATAR_STR = "change-" + AVATAR_STR;
+	public static final String CHANGE_AVATAR_STR = "change-" + AVATAR_STR;
 	
-	protected static final String USER_UPDATE_DONE = USER_STR + DOT + UPDATE_DONE;
+	public static final String USER_UPDATE_DONE = USER_STR + DOT + UPDATE_DONE;
 	
-	protected static final String PASSWORD_UPDATE_DONE = PASSWORD_STR + DOT + UPDATE_DONE;
+	public static final String PASSWORD_UPDATE_DONE = PASSWORD_STR + DOT + UPDATE_DONE;
 	
-	protected static final String AVATAR_UPDATE_DONE = AVATAR_STR + DOT + UPDATE_DONE;
+	public static final String AVATAR_UPDATE_DONE = AVATAR_STR + DOT + UPDATE_DONE;
 	
-	protected static final String FAN_UPDATE_DONE = FAN + DOT + UPDATE_DONE;
+	public static final String FAN_UPDATE_DONE = FAN + DOT + UPDATE_DONE;
 	
-	protected static final String ARTIST_UPDATE_DONE = ARTIST + DOT + UPDATE_DONE;
+	public static final String ARTIST_UPDATE_DONE = ARTIST + DOT + UPDATE_DONE;
+	
+	public static final String AVATAR_PREFIX_URL = "/img/avatar-";
+	
+	public static final String CURRENT_AVATAR_URL = AVATAR_PREFIX_URL+"current.jpg";
 	
 	/* Contexts URLs */
 	
@@ -184,39 +200,39 @@ public abstract class GenericController {
 	
 	/* Pages */
 	
-	protected static final String HOME_PAGE = TILES_PREFIX + HOME_STR;
+	public static final String HOME_PAGE = TILES_PREFIX + HOME_STR;
 	
-	protected static final String LOGIN_FORM_PAGE = TILES_PREFIX + LOGIN_FORM;
+	public static final String LOGIN_FORM_PAGE = TILES_PREFIX + LOGIN_FORM;
 	
-	protected static final String LOST_PASSWORD_PAGE = TILES_PREFIX + LOST_PASSWORD_STR;
+	public static final String LOST_PASSWORD_PAGE = TILES_PREFIX + LOST_PASSWORD_STR;
 	
-	protected static final String CHANGE_PASSWORD_PAGE = TILES_PREFIX + CHANGE_PASSWORD_STR;
+	public static final String CHANGE_PASSWORD_PAGE = TILES_PREFIX + CHANGE_PASSWORD_STR;
 	
-	protected static final String CHANGE_AVATAR_PAGE = TILES_PREFIX + CHANGE_AVATAR_STR;
+	public static final String CHANGE_AVATAR_PAGE = TILES_PREFIX + CHANGE_AVATAR_STR;
 	
-	protected static final String SIGNUP_PAGE = TILES_PREFIX + SIGNUP_STR;
+	public static final String SIGNUP_PAGE = TILES_PREFIX + SIGNUP_STR;
 	
-	protected static final String FAN_SIGNUP_PAGE = TILES_PREFIX + FAN_PREFIX + SIGNUP_FORM;
+	public static final String FAN_SIGNUP_PAGE = TILES_PREFIX + FAN_PREFIX + SIGNUP_FORM;
 	
-	protected static final String ARTIST_SIGNUP_PAGE = TILES_PREFIX + ARTIST_PREFIX + SIGNUP_FORM;
+	public static final String ARTIST_SIGNUP_PAGE = TILES_PREFIX + ARTIST_PREFIX + SIGNUP_FORM;
 	
-	protected static final String SIGNUP_SUCESS_PAGE = TILES_PREFIX + SIGNUP_SUCESS;
+	public static final String SIGNUP_SUCESS_PAGE = TILES_PREFIX + SIGNUP_SUCESS;
 	
-	protected static final String USER_PROFILE_PAGE = TILES_PREFIX + USER_PREFIX + PROFILE_STR;
+	public static final String USER_PROFILE_PAGE = TILES_PREFIX + USER_PREFIX + PROFILE_STR;
 	
-	protected static final String FAN_PROFILE_PAGE = TILES_PREFIX + FAN_PREFIX + PROFILE_STR;
+	public static final String FAN_PROFILE_PAGE = TILES_PREFIX + FAN_PREFIX + PROFILE_STR;
 	
-	protected static final String ARTIST_PROFILE_PAGE = TILES_PREFIX + ARTIST_PREFIX + PROFILE_STR;
+	public static final String ARTIST_PROFILE_PAGE = TILES_PREFIX + ARTIST_PREFIX + PROFILE_STR;
 	
-	protected static final String USER_EDIT_PROFILE_PAGE = TILES_PREFIX + USER_PREFIX + EDIT_PROFILE;
+	public static final String USER_EDIT_PROFILE_PAGE = TILES_PREFIX + USER_PREFIX + EDIT_PROFILE;
 	
-	protected static final String FAN_EDIT_PROFILE_PAGE = TILES_PREFIX + FAN_PREFIX + EDIT_PROFILE;
+	public static final String FAN_EDIT_PROFILE_PAGE = TILES_PREFIX + FAN_PREFIX + EDIT_PROFILE;
 	
-	protected static final String ARTIST_EDIT_PROFILE_PAGE = TILES_PREFIX + ARTIST_PREFIX + EDIT_PROFILE;
+	public static final String ARTIST_EDIT_PROFILE_PAGE = TILES_PREFIX + ARTIST_PREFIX + EDIT_PROFILE;
 	
-	protected static final String ERROR_PAGE = TILES_PREFIX + ERROR;
+	public static final String ERROR_PAGE = TILES_PREFIX + ERROR;
 	
-	protected final Logger LOG = LoggerFactory.getLogger(getClass());
+	public final Logger LOG = LoggerFactory.getLogger(getClass());
 	
 	protected UserDetails getUserDetails(Principal principal) {
 		UserDetails userDetails = null;
